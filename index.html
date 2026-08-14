@@ -6,9 +6,9 @@
 <meta name="theme-color" content="#f3f0ea" id="metaThemeColor">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="app-version" content="1.0.1">
+<meta name="app-version" content="1.0.2">
 <link rel="manifest" href="./manifest.json">
-<title>CALGAS Capacitors — Help Desk</title>
+<title>Calgas Tasks</title>
 <link rel="icon" href="https://i.postimg.cc/HxdkG3R1/CALGAS-CAPACITORS-LOGO-192x192.jpg">
 <link rel="apple-touch-icon" href="https://i.postimg.cc/76wZvXdD/CALGAS-CAPACITORS-LOGO-512x512.jpg">
 <link rel="preload" href="https://i.postimg.cc/HxdkG3R1/CALGAS-CAPACITORS-LOGO-192x192.jpg" as="image">
@@ -264,7 +264,7 @@
   .ticket-main { min-width: 0; }
   .ticket-subject { font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .ticket-meta { font-size: 11.5px; color: var(--ink-faint); }
-  .ticket-row-head { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-faint); padding: 0 10px 10px; }
+  .ticket-row-head { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); padding: 16px 10px 12px; border-bottom: 1px solid var(--line-soft); margin-bottom: 2px; }
   .ticket-row-head .sortable { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; transition: color 0.12s var(--ease); }
   .ticket-row-head .sortable:hover { color: var(--ink); }
   .ticket-row-head .sortable.sort-active { color: var(--copper); }
@@ -308,9 +308,33 @@
   .timeline-time { font-size: 11px; color: var(--ink-faint); }
   .timeline-status-chip { font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 10px; background: var(--indigo-soft); color: var(--indigo); }
   .timeline-comment { font-size: 13px; color: var(--ink-soft); margin-top: 3px; line-height: 1.5; white-space: pre-wrap; }
-  .comment-box { display: flex; gap: 8px; margin-top: 16px; align-items: flex-start; }
-  .comment-box textarea { flex: 1; min-width: 0; min-height: 40px; resize: vertical; padding: 9px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); color: var(--ink); font-size: 13px; }
-  .comment-box button { flex-shrink: 0; width: auto; padding: 9px 16px; }
+
+  /* ---------- Attachments ---------- */
+  .attach-label {
+    display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border-radius: var(--radius-sm);
+    border: 1px dashed var(--line); color: var(--ink-soft); font-size: 12.5px; font-weight: 600; cursor: pointer;
+    transition: background 0.15s var(--ease), border-color 0.15s var(--ease), color 0.15s var(--ease); flex-shrink: 0;
+  }
+  .attach-label:hover { background: var(--hover-surface); border-color: var(--copper); color: var(--copper); }
+  .attachment-field-row { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .attachment-chip { position: relative; display: inline-flex; flex-shrink: 0; }
+  .attachment-chip img { width: 52px; height: 52px; object-fit: cover; border-radius: var(--radius-sm); border: 1px solid var(--line); display: block; }
+  .attachment-remove {
+    position: absolute; top: -7px; right: -7px; width: 20px; height: 20px; border-radius: 50%; padding: 0;
+    background: var(--critical); color: #fff; font-size: 13px; line-height: 1; display: flex; align-items: center; justify-content: center;
+    box-shadow: var(--shadow-sm);
+  }
+  .attachment-remove:hover { background: #b0402c; }
+  .ticket-attachment, .timeline-attachment { display: inline-block; margin-top: 10px; }
+  .ticket-attachment img, .timeline-attachment img {
+    max-width: 240px; max-height: 170px; border-radius: var(--radius-sm); border: 1px solid var(--line); display: block; object-fit: cover; cursor: zoom-in;
+  }
+
+  .comment-box { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+  .comment-attach-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .comment-input-row { display: flex; gap: 8px; align-items: flex-start; }
+  .comment-input-row textarea { flex: 1; min-width: 0; min-height: 40px; resize: vertical; padding: 9px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); color: var(--ink); font-size: 13px; }
+  .comment-input-row button { flex-shrink: 0; width: auto; padding: 9px 16px; }
 
   /* ---------- Users table ---------- */
   .users-table { width: 100%; border-collapse: collapse; }
@@ -398,7 +422,7 @@
       <div class="cap-plate cap-plate-right" aria-hidden="true"></div>
     </div>
     <h2 class="splash-title js-company-name"></h2>
-    <p class="splash-sub">Help Desk</p>
+    <p class="splash-sub js-app-name"></p>
     <div class="splash-progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="splashProgress">
       <div class="splash-progress-bar" id="splashProgressBar"></div>
     </div>
@@ -418,7 +442,7 @@
 
 <div id="loginScreen" class="center-screen hidden">
   <div class="auth-card">
-    <div class="auth-brand"><img class="js-company-logo-full" alt=""><div class="auth-brand-sub">Help Desk</div></div>
+    <div class="auth-brand"><img class="js-company-logo-full" alt=""><div class="auth-brand-sub js-app-name"></div></div>
     <h1>Sign in</h1>
     <p class="lede">Raise an issue, route it to the right person, track it through.</p>
     <form id="loginForm">
@@ -463,7 +487,7 @@
 
 <div id="appShell" class="hidden">
   <nav class="rail" id="railNav">
-    <div class="rail-brand"><img class="js-company-logo-icon" alt=""><div><div class="rail-brand-name js-company-name"></div><div class="rail-brand-sub">Help Desk</div></div></div>
+    <div class="rail-brand"><img class="js-company-logo-icon" alt=""><div><div class="rail-brand-name js-company-name"></div><div class="rail-brand-sub js-app-name"></div></div></div>
 
     <a href="#" class="nav-link active" data-page="home">
       <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2 7L8 2L14 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 6.5V13.5H12V6.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
@@ -491,7 +515,7 @@
     <div class="topbar">
       <div class="mobile-brand hidden-desktop">
         <img class="js-company-logo-icon" alt="">
-        <div><div class="mobile-brand-name js-company-name"></div><div class="mobile-brand-sub">Help Desk</div></div>
+        <div><div class="mobile-brand-name js-company-name"></div><div class="mobile-brand-sub js-app-name"></div></div>
       </div>
       <div class="user-badge">
         <span class="conn-badge conn-online" id="connBadge"></span>
@@ -525,6 +549,14 @@
       </div>
       <div class="panel">
         <div class="panel-head"><h3>Recent tickets</h3><button class="btn-ghost" id="homeViewAllBtn">View all →</button></div>
+        <div class="ticket-row ticket-row-head">
+          <div class="ticket-id">ID</div>
+          <div class="ticket-main">Subject</div>
+          <div class="pbadge">Priority</div>
+          <div class="ticket-resp">Responsible</div>
+          <div class="ticket-assignee">Assigned to</div>
+          <div class="ticket-status-cell">Status</div>
+        </div>
         <div id="recentTicketsList"></div>
       </div>
     </section>
@@ -555,7 +587,7 @@
 
     <section class="page" id="page-users">
       <div class="page-head">
-        <div><h2>Team &amp; Access</h2><p>Add and manage the people who use this Help Desk.</p></div>
+        <div><h2>Team &amp; Access</h2><p>Add and manage the people who use this app.</p></div>
         <button class="btn-primary" style="width:auto" id="addUserBtn">+ Add person</button>
       </div>
       <div class="panel" style="padding-top:8px">
@@ -575,11 +607,12 @@
 
 <script>
 /* ============================================================
-   CALGAS Capacitors — Help Desk
+   CALGAS Capacitors — Calgas Tasks
    Single-file PWA frontend. No build step, no framework.
    ============================================================ */
 const GOOGLE_API_URL = 'https://script.google.com/macros/s/AKfycbzHRIcBXUANi7wRTOxgn7DooK1UJ65toeSJ792LwXocAD2o72FNQRA2fkNv7FRy2uel/exec';
-const APP_VERSION = '1.0.1';
+const APP_VERSION = '1.0.2';
+const APP_NAME = 'Calgas Tasks';
 const COMPANY_NAME = 'CALGAS CAPACITORS';
 const COMPANY_LOGO_ICON_URL = 'https://i.postimg.cc/HxdkG3R1/CALGAS-CAPACITORS-LOGO-192x192.jpg';
 const COMPANY_LOGO_FULL_URL = 'https://i.postimg.cc/76wZvXdD/CALGAS-CAPACITORS-LOGO-512x512.jpg';
@@ -706,7 +739,9 @@ function setSplashProgress(pct, status) {
 }
 
 async function boot() {
+  document.title = APP_NAME;
   document.querySelectorAll('.js-company-name').forEach(function (el) { el.textContent = COMPANY_NAME; });
+  document.querySelectorAll('.js-app-name').forEach(function (el) { el.textContent = APP_NAME; });
   document.querySelectorAll('.js-company-logo-icon').forEach(function (el) { el.src = COMPANY_LOGO_ICON_URL; });
   document.querySelectorAll('.js-company-logo-full').forEach(function (el) { el.src = COMPANY_LOGO_FULL_URL; });
   document.getElementById('appVersion').textContent = 'v' + APP_VERSION;
@@ -895,6 +930,77 @@ function userOptionsHtml(selected) {
   }).join('');
 }
 
+// ---------- Attachments ----------
+// Resizes to a max dimension and re-encodes as JPEG client-side, so a
+// multi-MB phone photo turns into a small upload regardless of how the
+// original was shot.
+function readAndCompressImage(file, maxDim, quality) {
+  return new Promise(function (resolve, reject) {
+    if (!file) { resolve(null); return; }
+    if (!file.type || file.type.indexOf('image/') !== 0) { reject(new Error('Please choose an image file.')); return; }
+    const reader = new FileReader();
+    reader.onerror = function () { reject(new Error('Could not read that file.')); };
+    reader.onload = function () {
+      const img = new Image();
+      img.onerror = function () { reject(new Error('Could not read that image.')); };
+      img.onload = function () {
+        const scale = Math.min(1, (maxDim || 1600) / Math.max(img.width, img.height));
+        const cw = Math.max(1, Math.round(img.width * scale));
+        const ch = Math.max(1, Math.round(img.height * scale));
+        const canvas = document.createElement('canvas');
+        canvas.width = cw; canvas.height = ch;
+        canvas.getContext('2d').drawImage(img, 0, 0, cw, ch);
+        const dataUrl = canvas.toDataURL('image/jpeg', quality || 0.82);
+        resolve({ dataUrl: dataUrl, base64: dataUrl.split(',')[1], mimeType: 'image/jpeg' });
+      };
+      img.src = reader.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+// Wires a file input + chip preview + remove button together. Returns an
+// object with a getAttachment() accessor so the caller can pull the
+// compressed result at submit time, and a reset() to clear it after use.
+function setupAttachmentPicker(inputId, previewId, imgId, removeId, attachLabelEl) {
+  const input = document.getElementById(inputId);
+  const preview = document.getElementById(previewId);
+  const img = document.getElementById(imgId);
+  const removeBtn = document.getElementById(removeId);
+  let current = null;
+
+  input.addEventListener('change', async function () {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    try {
+      const compressed = await readAndCompressImage(file, 1600, 0.82);
+      current = compressed;
+      img.src = compressed.dataUrl;
+      preview.classList.remove('hidden');
+      if (attachLabelEl) attachLabelEl.classList.add('hidden');
+    } catch (err) {
+      showToast(err.message, 'error');
+      input.value = '';
+    }
+  });
+  removeBtn.addEventListener('click', function () {
+    current = null;
+    input.value = '';
+    preview.classList.add('hidden');
+    if (attachLabelEl) attachLabelEl.classList.remove('hidden');
+  });
+
+  return {
+    getAttachment: function () { return current; },
+    reset: function () {
+      current = null;
+      input.value = '';
+      preview.classList.add('hidden');
+      if (attachLabelEl) attachLabelEl.classList.remove('hidden');
+    }
+  };
+}
+
 // ---------- Home ----------
 async function refreshHome() {
   document.getElementById('recentTicketsList').innerHTML = loadingStateHtml('Loading tickets…');
@@ -1042,6 +1148,14 @@ function openNewTicketModal(e) {
             '<div class="field"><label>Responsible person</label><select id="ntResponsible" required><option value="">Select…</option>' + userOptionsHtml('') + '</select><div class="hint">Who is accountable for this issue/area.</div></div>' +
             '<div class="field"><label>Assigned to (seeking help from)</label><select id="ntAssigned" required><option value="">Select…</option>' + userOptionsHtml('') + '</select><div class="hint">Who you want to fix it.</div></div>' +
           '</div>' +
+          '<div class="field">' +
+            '<label>Photo (optional)</label>' +
+            '<div class="attachment-field-row">' +
+              '<label class="attach-label" for="ntAttachment" id="ntAttachLabel"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M9.5 2.5H4a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6L9.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.5 2.5V6H13" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Choose photo</label>' +
+              '<input type="file" id="ntAttachment" accept="image/*" capture="environment" class="hidden">' +
+              '<div id="ntAttachmentPreview" class="attachment-chip hidden"><img id="ntAttachmentImg" alt=""><button type="button" id="ntAttachmentRemove" class="attachment-remove">&times;</button></div>' +
+            '</div>' +
+          '</div>' +
           '<div class="form-error" id="ntError"></div>' +
           '<div class="modal-actions"><button type="button" class="btn-secondary" id="cancelNewTicket">Cancel</button><button type="submit" class="btn-primary" style="width:auto" id="ntSubmit">Raise ticket</button></div>' +
         '</form>' +
@@ -1052,6 +1166,7 @@ function openNewTicketModal(e) {
   backdrop.addEventListener('click', function (e2) { if (e2.target === backdrop) backdrop.remove(); });
   document.getElementById('closeNewTicket').addEventListener('click', function () { backdrop.remove(); });
   document.getElementById('cancelNewTicket').addEventListener('click', function () { backdrop.remove(); });
+  const ntAttachment = setupAttachmentPicker('ntAttachment', 'ntAttachmentPreview', 'ntAttachmentImg', 'ntAttachmentRemove', document.getElementById('ntAttachLabel'));
   document.getElementById('newTicketForm').addEventListener('submit', async function (e2) {
     e2.preventDefault();
     const btn = document.getElementById('ntSubmit');
@@ -1059,12 +1174,15 @@ function openNewTicketModal(e) {
     errEl.textContent = '';
     btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Raising…';
     try {
+      const attachment = ntAttachment.getAttachment();
       const result = await api('createTicket', {
         subject: document.getElementById('ntSubject').value.trim(),
         description: document.getElementById('ntDescription').value.trim(),
         priority: document.getElementById('ntPriority').value,
         responsiblePerson: document.getElementById('ntResponsible').value,
-        assignedTo: document.getElementById('ntAssigned').value
+        assignedTo: document.getElementById('ntAssigned').value,
+        attachmentBase64: attachment ? attachment.base64 : undefined,
+        attachmentMimeType: attachment ? attachment.mimeType : undefined
       });
       backdrop.remove();
       showToast('Ticket ' + result.ticketId + ' raised.', 'ok');
@@ -1122,13 +1240,17 @@ function renderTicketDetailModal(t, updates) {
 
   const timelineHtml = updates.map(function (u) {
     const statusChip = u.StatusTo ? '<span class="timeline-status-chip">' + escapeHtml(u.StatusFrom ? (u.StatusFrom + ' → ' + u.StatusTo) : u.StatusTo) + '</span>' : '';
+    const attachmentHtml = u.AttachmentURL ? '<a class="timeline-attachment" href="' + escapeHtml(u.AttachmentURL) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(u.AttachmentURL) + '" alt="Attachment"></a>' : '';
     return '<div class="timeline-item">' +
       '<div class="timeline-avatar">' + escapeHtml(initials(u.AuthorName)).toUpperCase() + '</div>' +
       '<div class="timeline-body">' +
         '<div class="timeline-head-row"><span class="timeline-author">' + escapeHtml(u.AuthorName) + '</span><span class="timeline-time">' + fmtDate(u.Timestamp) + '</span>' + statusChip + '</div>' +
         (u.Comment ? '<div class="timeline-comment">' + escapeHtml(u.Comment) + '</div>' : '') +
+        attachmentHtml +
       '</div></div>';
   }).join('');
+
+  const ticketAttachmentHtml = t.AttachmentURL ? '<a class="ticket-attachment" href="' + escapeHtml(t.AttachmentURL) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(t.AttachmentURL) + '" alt="Attachment"></a>' : '';
 
   const html =
     '<div class="modal-backdrop" id="ticketDetailBackdrop">' +
@@ -1142,7 +1264,8 @@ function renderTicketDetailModal(t, updates) {
           '<span class="pbadge"><span class="pdot ' + priorityDotClass(t.Priority) + '"></span>' + escapeHtml(t.Priority) + ' priority</span>' +
         '</div>' +
         '<div class="ticket-detail-desc">' + escapeHtml(t.Description) + '</div>' +
-        '<div class="kv-grid">' +
+        ticketAttachmentHtml +
+        '<div class="kv-grid" style="margin-top:16px">' +
           '<div class="kv-item"><div class="kv-label">Raised by</div><div class="kv-value">' + escapeHtml(t.RaisedByName) + (t.RaisedByDept ? ' · ' + escapeHtml(t.RaisedByDept) : '') + '</div></div>' +
           '<div class="kv-item"><div class="kv-label">Raised on</div><div class="kv-value">' + fmtDate(t.CreatedAt) + '</div></div>' +
           '<div class="kv-item"><div class="kv-label">Responsible person</div><div class="kv-value">' + escapeHtml(userName(t.ResponsiblePerson)) + '</div></div>' +
@@ -1152,7 +1275,14 @@ function renderTicketDetailModal(t, updates) {
         (isAdmin ? '<button class="btn-ghost" id="editTicketBtn" style="margin-bottom:12px">✎ Edit ticket details</button>' : '') +
         (statusButtons ? '<div class="status-actions">' + statusButtons + '</div>' : '') +
         '<div class="timeline"><div class="timeline-title">Activity</div>' + timelineHtml + '</div>' +
-        '<div class="comment-box"><textarea id="newCommentText" placeholder="Add an update or comment…"></textarea><button class="btn-primary" style="width:auto" id="postCommentBtn">Post</button></div>' +
+        '<div class="comment-box">' +
+          '<div class="comment-attach-row">' +
+            '<label class="attach-label" for="commentAttachment" id="commentAttachLabel"><svg width="14" height="14" viewBox="0 0 16 16" fill="none"><path d="M9.5 2.5H4a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V6L9.5 2.5Z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M9.5 2.5V6H13" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Attach photo</label>' +
+            '<input type="file" id="commentAttachment" accept="image/*" capture="environment" class="hidden">' +
+            '<div id="commentAttachmentPreview" class="attachment-chip hidden"><img id="commentAttachmentImg" alt=""><button type="button" id="commentAttachmentRemove" class="attachment-remove">&times;</button></div>' +
+          '</div>' +
+          '<div class="comment-input-row"><textarea id="newCommentText" placeholder="Add an update or comment…"></textarea><button class="btn-primary" style="width:auto" id="postCommentBtn">Post</button></div>' +
+        '</div>' +
       '</div>' +
     '</div>';
 
@@ -1175,12 +1305,18 @@ function renderTicketDetailModal(t, updates) {
     });
   });
 
+  const commentAttachment = setupAttachmentPicker('commentAttachment', 'commentAttachmentPreview', 'commentAttachmentImg', 'commentAttachmentRemove', document.getElementById('commentAttachLabel'));
   document.getElementById('postCommentBtn').addEventListener('click', async function () {
     const text = document.getElementById('newCommentText').value.trim();
-    if (!text) return;
+    const attachment = commentAttachment.getAttachment();
+    if (!text && !attachment) return;
     this.disabled = true;
     try {
-      await api('addComment', { ticketId: t.TicketID, comment: text });
+      await api('addComment', {
+        ticketId: t.TicketID, comment: text,
+        attachmentBase64: attachment ? attachment.base64 : undefined,
+        attachmentMimeType: attachment ? attachment.mimeType : undefined
+      });
       openTicketDetail(t.TicketID);
     } catch (err) { showToast(err.message, 'error'); this.disabled = false; }
   });
