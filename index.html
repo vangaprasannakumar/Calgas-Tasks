@@ -359,9 +359,11 @@
   .multiselect-empty { padding: 14px; text-align: center; color: var(--ink-faint); font-size: 12.5px; }
 
   /* ---------- Users table ---------- */
-  .users-table { width: 100%; border-collapse: collapse; }
-  .users-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); padding: 0 10px 10px; }
-  .users-table td { padding: 12px 10px; border-top: 1px solid var(--line-soft); font-size: 13px; }
+  .users-table { width: 100%; min-width: 760px; border-collapse: collapse; }
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -20px; padding: 0 20px; }
+  .table-scroll-hint { display: none; text-align: center; font-size: 11px; color: var(--ink-faint); margin: 8px 0 0; }
+  .users-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); padding: 0 10px 10px; white-space: nowrap; }
+  .users-table td { padding: 12px 10px; border-top: 1px solid var(--line-soft); font-size: 13px; white-space: nowrap; }
   .users-table tr:hover td { background: var(--hover-surface); }
   .role-pill { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
   .role-pill.admin { background: var(--indigo-soft); color: var(--indigo); }
@@ -422,6 +424,7 @@
     .task-row-head .task-status-cell { order: 3; margin-left: auto; }
 
     .scroll-top-btn { bottom: 86px; right: 16px; }
+    .table-scroll-hint { display: block; }
   }
   @media (min-width: 861px) { .hidden-desktop { display: none !important; } }
 </style>
@@ -616,10 +619,13 @@
         <button class="btn-primary" style="width:auto" id="addUserBtn">+ Add person</button>
       </div>
       <div class="panel" style="padding-top:8px">
-        <table class="users-table">
-          <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Department</th><th>Email</th><th>Pending pts</th><th>Earned pts</th><th>Status</th><th></th></tr></thead>
-          <tbody id="usersTableBody"></tbody>
-        </table>
+        <div class="table-scroll">
+          <table class="users-table">
+            <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Department</th><th>Email</th><th>Pending pts</th><th>Earned pts</th><th>Status</th><th></th></tr></thead>
+            <tbody id="usersTableBody"></tbody>
+          </table>
+        </div>
+        <p class="table-scroll-hint">← Swipe to see more →</p>
       </div>
     </section>
   </div>
@@ -752,6 +758,7 @@ function switchPage(pageKey) {
   document.querySelectorAll('.nav-link[data-page]').forEach(function (l) {
     l.classList.toggle('active', l.dataset.page === pageKey);
   });
+  window.scrollTo(0, 0);
   if (pageKey === 'home') refreshHome();
   if (pageKey === 'tasks') refreshTasksList();
   if (pageKey === 'users') refreshUsers();
@@ -1618,7 +1625,7 @@ window.addEventListener('offline', function () { const b = document.getElementBy
 // ---------- Scroll to top ----------
 const scrollTopBtn = document.getElementById('scrollTopBtn');
 window.addEventListener('scroll', function () {
-  scrollTopBtn.classList.toggle('visible', window.scrollY > 400);
+  scrollTopBtn.classList.toggle('visible', window.scrollY > 150);
 }, { passive: true });
 scrollTopBtn.addEventListener('click', function () {
   window.scrollTo({ top: 0, behavior: 'smooth' });
