@@ -1,6 +1,6 @@
 {
-  "name": "CALGAS Capacitors Help Desk",
-  "short_name": "HelpDesk",
+  "name": "Calgas Tasks",
+  "short_name": "CalgasTasks",
   "description": "Internal help ticket system — raise issues, route them to the right person, track status.",
   "start_url": "./index.html",
   "display": "standalone",
