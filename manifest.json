@@ -1,0 +1,21 @@
+{
+  "name": "CALGAS Capacitors Help Desk",
+  "short_name": "HelpDesk",
+  "description": "Internal help ticket system — raise issues, route them to the right person, track status.",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f3f0ea",
+  "theme_color": "#f3f0ea",
+  "icons": [
+    {
+      "src": "https://i.postimg.cc/HxdkG3R1/CALGAS-CAPACITORS-LOGO-192x192.jpg",
+      "sizes": "192x192",
+      "type": "image/jpeg"
+    },
+    {
+      "src": "https://i.postimg.cc/76wZvXdD/CALGAS-CAPACITORS-LOGO-512x512.jpg",
+      "sizes": "512x512",
+      "type": "image/jpeg"
+    }
+  ]
+}
