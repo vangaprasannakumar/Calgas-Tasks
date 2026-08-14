@@ -6,7 +6,7 @@
 <meta name="theme-color" content="#f3f0ea" id="metaThemeColor">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="app-version" content="1.0.2">
+<meta name="app-version" content="2.0.0">
 <link rel="manifest" href="./manifest.json">
 <title>Calgas Tasks</title>
 <link rel="icon" href="https://i.postimg.cc/HxdkG3R1/CALGAS-CAPACITORS-LOGO-192x192.jpg">
@@ -100,7 +100,6 @@
   .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: -2px; margin-right: 8px; }
   .spinner-dark { border-color: rgba(28,32,36,0.15); border-top-color: var(--ink); }
 
-  /* ---------- Splash ---------- */
   /* ---------- Global request progress bar ---------- */
   #appProgressBar { position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 300; overflow: hidden; opacity: 0; transition: opacity 0.2s var(--ease); pointer-events: none; }
   #appProgressBar.active { opacity: 1; }
@@ -111,6 +110,7 @@
   }
   @keyframes progressSlide { 0% { left: -40%; } 100% { left: 100%; } }
 
+  /* ---------- Splash ---------- */
   #initialLoader { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: var(--paper); overflow: hidden; }
   .splash-orbs { position: absolute; inset: 0; pointer-events: none; }
   .splash-orb { position: absolute; width: 280px; height: 280px; border-radius: 50%; filter: blur(60px); animation: orbFloat 8s ease-in-out infinite; }
@@ -175,12 +175,10 @@
     width: 220px; flex-shrink: 0; background: var(--rail); color: var(--rail-ink); display: flex; flex-direction: column;
     padding: 18px 12px; transition: width 0.25s var(--spring);
   }
-  .rail.collapsed { width: 72px; }
   .rail-brand { display: flex; align-items: center; gap: 10px; padding: 6px 8px 20px; }
   .rail-brand img { width: 34px; height: 34px; border-radius: 9px; object-fit: cover; flex-shrink: 0; }
   .rail-brand-name { font-size: 13.5px; font-weight: 700; letter-spacing: 0.02em; white-space: nowrap; }
   .rail-brand-sub { font-size: 11px; color: var(--rail-soft); white-space: nowrap; }
-  .rail.collapsed .rail-brand-name, .rail.collapsed .rail-brand-sub, .rail.collapsed .nav-link .label { display: none; }
   .nav-link {
     display: flex; align-items: center; gap: 11px; padding: 10px 12px; border-radius: var(--radius-sm); color: var(--rail-soft);
     text-decoration: none; font-size: 13.5px; font-weight: 500; margin-bottom: 2px; transition: background 0.15s var(--ease), color 0.15s var(--ease);
@@ -188,10 +186,7 @@
   .nav-link:hover { background: rgba(255,255,255,0.06); color: var(--rail-ink); }
   .nav-link.active { background: var(--copper-soft); color: var(--copper); font-weight: 600; }
   .nav-link svg { flex-shrink: 0; }
-  .nav-badge { margin-left: auto; background: var(--critical); color: #fff; font-size: 10.5px; font-weight: 700; padding: 1px 6px; border-radius: 10px; }
   .rail-footer { margin-top: auto; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.08); }
-  .rail-btn { display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px; color: var(--rail-soft); background: transparent; border-radius: var(--radius-sm); font-size: 12.5px; }
-  .rail-btn:hover { background: rgba(255,255,255,0.06); color: var(--rail-ink); }
   .version { padding: 8px 12px 0; font-size: 10.5px; color: var(--rail-soft); opacity: 0.6; }
 
   .main { flex: 1; min-width: 0; display: flex; flex-direction: column; }
@@ -226,6 +221,7 @@
   .stat-card .label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
   .stat-card .label { font-size: 12px; color: var(--ink-soft); font-weight: 600; }
   .stat-card .value { font-size: 26px; font-weight: 700; font-family: var(--font-mono); }
+  .stat-card .value-sub { font-size: 11.5px; color: var(--ink-faint); font-weight: 600; margin-top: 2px; }
   .icon-wrap { width: 28px; height: 28px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
   .wrap-blue { background: var(--azure-soft); color: var(--azure); }
   .wrap-copper { background: var(--copper-soft); color: var(--copper); }
@@ -247,27 +243,29 @@
   .badge { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 11.5px; font-weight: 700; letter-spacing: 0.01em; white-space: nowrap; }
   .badge-open { background: var(--azure-soft); color: var(--azure); }
   .badge-in-progress { background: var(--low-soft); color: var(--low); }
-  .badge-resolved { background: var(--ok-soft); color: var(--ok); }
+  .badge-completed { background: var(--ok-soft); color: var(--ok); }
   .badge-closed { background: var(--none-soft); color: var(--none-ink); }
   .badge-cancelled { background: var(--critical-soft); color: var(--critical); }
   .pbadge { display: inline-flex; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 700; }
   .pdot { width: 7px; height: 7px; border-radius: 50%; }
   .pdot-low { background: var(--ok); } .pdot-medium { background: var(--azure); } .pdot-high { background: var(--low); } .pdot-urgent { background: var(--critical); }
+  .points-chip { display: inline-flex; align-items: center; gap: 3px; font-size: 11px; font-weight: 700; color: var(--copper); background: var(--copper-soft); padding: 2px 8px; border-radius: 20px; }
 
-  .ticket-row {
-    display: grid; grid-template-columns: 90px 1fr 110px 130px 130px 100px; gap: 12px; align-items: center;
+  .task-row {
+    display: grid; grid-template-columns: 90px 1fr 110px 90px 150px 150px 100px; gap: 12px; align-items: center;
     padding: 13px 10px; border-bottom: 1px solid var(--line-soft); cursor: pointer; transition: background 0.12s var(--ease);
   }
-  .ticket-row:hover { background: var(--hover-surface); }
-  .ticket-row:last-child { border-bottom: none; }
-  .ticket-id { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
-  .ticket-main { min-width: 0; }
-  .ticket-subject { font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .ticket-meta { font-size: 11.5px; color: var(--ink-faint); }
-  .ticket-row-head { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); padding: 16px 10px 12px; border-bottom: 1px solid var(--line-soft); margin-bottom: 2px; }
-  .ticket-row-head .sortable { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; transition: color 0.12s var(--ease); }
-  .ticket-row-head .sortable:hover { color: var(--ink); }
-  .ticket-row-head .sortable.sort-active { color: var(--copper); }
+  .task-row:hover { background: var(--hover-surface); }
+  .task-row:last-child { border-bottom: none; }
+  .task-id { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); }
+  .task-main { min-width: 0; }
+  .task-subject { font-size: 13.5px; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .task-meta { font-size: 11.5px; color: var(--ink-faint); }
+  .task-persons { font-size: 12.5px; color: var(--ink-soft); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .task-row-head { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-soft); padding: 16px 10px 12px; border-bottom: 1px solid var(--line-soft); margin-bottom: 2px; }
+  .task-row-head .sortable { display: inline-flex; align-items: center; gap: 4px; cursor: pointer; user-select: none; transition: color 0.12s var(--ease); }
+  .task-row-head .sortable:hover { color: var(--ink); }
+  .task-row-head .sortable.sort-active { color: var(--copper); }
   .sort-arrow { font-size: 9px; opacity: 0.35; line-height: 1; }
   .sortable.sort-active .sort-arrow { opacity: 1; }
   .empty-state { text-align: center; padding: 40px 20px; color: var(--ink-faint); font-size: 13.5px; }
@@ -281,14 +279,11 @@
   .modal-close { padding: 6px; border-radius: 50%; color: var(--ink-faint); font-size: 18px; line-height: 1; }
   .modal-close:hover { background: var(--hover-surface); color: var(--ink); }
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
+  .modal-loading { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 70px 20px; color: var(--ink-soft); font-size: 13.5px; }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   @media (max-width: 480px) { .field-row { grid-template-columns: 1fr; } }
 
-  .modal-loading { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 70px 20px; color: var(--ink-soft); font-size: 13.5px; }
-  .ticket-detail-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; margin-bottom: 6px; }
-  .ticket-detail-id { font-family: var(--font-mono); font-size: 12px; color: var(--ink-faint); margin-bottom: 4px; }
-  .ticket-detail-subject { font-size: 17px; font-weight: 700; margin: 0 0 10px; }
-  .ticket-detail-desc { font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); white-space: pre-wrap; margin-bottom: 16px; }
+  .task-detail-desc { font-size: 13.5px; line-height: 1.55; color: var(--ink-soft); white-space: pre-wrap; margin-bottom: 16px; }
   .kv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 16px; margin-bottom: 16px; }
   .kv-item .kv-label { font-size: 11px; color: var(--ink-faint); font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 3px; }
   .kv-item .kv-value { font-size: 13.5px; font-weight: 600; }
@@ -325,9 +320,9 @@
     box-shadow: var(--shadow-sm);
   }
   .attachment-remove:hover { background: #b0402c; }
-  .ticket-attachment, .timeline-attachment { display: inline-block; margin-top: 10px; }
-  .ticket-attachment img, .timeline-attachment img {
-    max-width: 240px; max-height: 170px; border-radius: var(--radius-sm); border: 1px solid var(--line); display: block; object-fit: cover; cursor: zoom-in;
+  .task-attachment, .timeline-attachment { display: inline-block; margin-top: 10px; }
+  .task-attachment img, .timeline-attachment img {
+    max-width: 240px; max-height: 170px; border-radius: var(--radius-sm); border: 1px solid var(--line); display: block; object-fit: cover; cursor: zoom-in; background: var(--hover-surface);
   }
 
   .comment-box { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
@@ -335,6 +330,33 @@
   .comment-input-row { display: flex; gap: 8px; align-items: flex-start; }
   .comment-input-row textarea { flex: 1; min-width: 0; min-height: 40px; resize: vertical; padding: 9px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); color: var(--ink); font-size: 13px; }
   .comment-input-row button { flex-shrink: 0; width: auto; padding: 9px 16px; }
+
+  /* ---------- Multi-select (Excel-filter style) ---------- */
+  .multiselect { position: relative; }
+  .multiselect-trigger {
+    width: 100%; text-align: left; padding: 10px 12px; border: 1px solid var(--line); border-radius: var(--radius-sm);
+    background: var(--paper); color: var(--ink); font-size: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  }
+  .multiselect-trigger:hover { border-color: var(--copper); }
+  .multiselect.open .multiselect-trigger { border-color: var(--copper); }
+  .multiselect-trigger-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .multiselect-trigger-text.placeholder { color: var(--ink-faint); }
+  .multiselect-chevron { flex-shrink: 0; color: var(--ink-faint); transition: transform 0.15s var(--ease); }
+  .multiselect.open .multiselect-chevron { transform: rotate(180deg); }
+  .multiselect-panel {
+    position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 60; background: var(--panel);
+    border: 1px solid var(--line); border-radius: var(--radius-sm); box-shadow: var(--shadow-lift);
+    max-height: 260px; display: flex; flex-direction: column; overflow: hidden;
+  }
+  .multiselect-search { margin: 8px; padding: 7px 10px; border: 1px solid var(--line); border-radius: var(--radius-sm); background: var(--paper); color: var(--ink); font-size: 13px; }
+  .multiselect-actions { display: flex; gap: 6px; padding: 0 10px 6px; border-bottom: 1px solid var(--line-soft); }
+  .multiselect-actions button { font-size: 11.5px; font-weight: 600; color: var(--copper); background: none; padding: 4px 6px; }
+  .multiselect-actions button:hover { text-decoration: underline; }
+  .multiselect-options { overflow-y: auto; padding: 6px; }
+  .multiselect-option { display: flex; align-items: center; gap: 9px; padding: 7px 8px; border-radius: var(--radius-sm); cursor: pointer; font-size: 13.5px; }
+  .multiselect-option:hover { background: var(--hover-surface); }
+  .multiselect-option input { accent-color: var(--copper); width: 15px; height: 15px; flex-shrink: 0; }
+  .multiselect-empty { padding: 14px; text-align: center; color: var(--ink-faint); font-size: 12.5px; }
 
   /* ---------- Users table ---------- */
   .users-table { width: 100%; border-collapse: collapse; }
@@ -374,9 +396,9 @@
     .rail-brand, .rail-footer { display: none; }
     .nav-link { flex-direction: column; gap: 3px; padding: 7px 8px; font-size: 10px; flex: 1; text-align: center; }
     .nav-link .label { display: block !important; }
-    #navNewTicket { color: var(--rail-ink); }
-    #navNewTicket svg { width: 30px; height: 30px; padding: 6px; border-radius: 50%; background: var(--copper); color: #fff; box-sizing: border-box; }
-    #navNewTicket:hover svg { background: var(--copper-deep); }
+    #navNewTask { color: var(--rail-ink); }
+    #navNewTask svg { width: 30px; height: 30px; padding: 6px; border-radius: 50%; background: var(--copper); color: #fff; box-sizing: border-box; }
+    #navNewTask:hover svg { background: var(--copper-deep); }
     .main { padding-bottom: 74px; }
     .hidden-desktop { display: flex; }
 
@@ -390,14 +412,14 @@
     .modal-actions { flex-wrap: wrap; }
     .modal-actions button { flex: 1; min-width: 120px; }
 
-    .ticket-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 12px 10px; }
-    .ticket-id, .ticket-assignee, .ticket-resp { display: none; }
-    .ticket-main { flex: 1 1 100%; order: 1; }
+    .task-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; padding: 12px 10px; }
+    .task-id, .task-persons.task-monitor, .task-persons.task-resp { display: none; }
+    .task-main { flex: 1 1 100%; order: 1; }
     .pbadge { order: 2; }
-    .ticket-status-cell { order: 3; margin-left: auto; }
-    .ticket-row-head .ticket-main { order: 1; }
-    .ticket-row-head .pbadge { order: 2; }
-    .ticket-row-head .ticket-status-cell { order: 3; margin-left: auto; }
+    .task-status-cell { order: 3; margin-left: auto; }
+    .task-row-head .task-main { order: 1; }
+    .task-row-head .pbadge { order: 2; }
+    .task-row-head .task-status-cell { order: 3; margin-left: auto; }
 
     .scroll-top-btn { bottom: 86px; right: 16px; }
   }
@@ -444,7 +466,7 @@
   <div class="auth-card">
     <div class="auth-brand"><img class="js-company-logo-full" alt=""><div class="auth-brand-sub js-app-name"></div></div>
     <h1>Sign in</h1>
-    <p class="lede">Raise an issue, route it to the right person, track it through.</p>
+    <p class="lede">Create a task, assign it to the right people, track it through.</p>
     <form id="loginForm">
       <div class="field"><label for="loginUsername">Username or email</label><input type="text" id="loginUsername" autocomplete="username" required></div>
       <div class="field"><label for="loginPassword">Password</label><input type="password" id="loginPassword" autocomplete="current-password" required></div>
@@ -493,13 +515,13 @@
       <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><path d="M2 7L8 2L14 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 6.5V13.5H12V6.5" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>
       <span class="label">Overview</span>
     </a>
-    <a href="#" class="nav-link" data-page="tickets">
+    <a href="#" class="nav-link" data-page="tasks">
       <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2.5" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.6"/><path d="M5.5 6.5H10.5M5.5 9.5H8.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      <span class="label">Tickets</span>
+      <span class="label">Tasks</span>
     </a>
-    <a href="#" class="nav-link" id="navNewTicket">
+    <a href="#" class="nav-link" id="navNewTask">
       <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.6"/><path d="M8 5.5V10.5M5.5 8H10.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-      <span class="label">New Ticket</span>
+      <span class="label">New Task</span>
     </a>
     <a href="#" class="nav-link hidden" id="navUsers" data-page="users">
       <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M1.5 14c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="6" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 8.3c1.8.2 3 1.4 3 3.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
@@ -536,63 +558,66 @@
 
     <section class="page active" id="page-home">
       <div class="page-head">
-        <div><h2>Overview</h2><p>Open issues and where they stand.</p></div>
-        <button class="btn-primary" style="width:auto" id="homeNewTicketBtn">+ New Ticket</button>
+        <div><h2>Overview</h2><p>Open tasks and where they stand.</p></div>
+        <button class="btn-primary" style="width:auto" id="homeNewTaskBtn">+ New Task</button>
       </div>
       <div class="stat-grid">
-        <div class="stat-card clickable" data-goto-status=""><div class="label-row"><span class="label">Total tickets</span><span class="icon-wrap wrap-blue">▤</span></div><div class="value" id="statTotal">—</div></div>
+        <div class="stat-card clickable" data-goto-status=""><div class="label-row"><span class="label">Total tasks</span><span class="icon-wrap wrap-blue">▤</span></div><div class="value" id="statTotal">—</div></div>
         <div class="stat-card clickable" data-goto-status="Open"><div class="label-row"><span class="label">Open</span><span class="icon-wrap wrap-blue">●</span></div><div class="value" id="statOpen">—</div></div>
         <div class="stat-card clickable" data-goto-status="In Progress"><div class="label-row"><span class="label">In progress</span><span class="icon-wrap wrap-low">●</span></div><div class="value" id="statInProgress">—</div></div>
-        <div class="stat-card clickable" data-goto-status="Resolved"><div class="label-row"><span class="label">Resolved</span><span class="icon-wrap wrap-ok">●</span></div><div class="value" id="statResolved">—</div></div>
+        <div class="stat-card clickable" data-goto-status="Completed"><div class="label-row"><span class="label">Completed</span><span class="icon-wrap wrap-ok">●</span></div><div class="value" id="statCompleted">—</div></div>
         <div class="stat-card clickable" data-goto-status="Closed"><div class="label-row"><span class="label">Closed</span><span class="icon-wrap wrap-none">●</span></div><div class="value" id="statClosed">—</div></div>
         <div class="stat-card clickable" data-goto-scope="mine"><div class="label-row"><span class="label">Involving me</span><span class="icon-wrap wrap-copper">★</span></div><div class="value" id="statMine">—</div></div>
+        <div class="stat-card"><div class="label-row"><span class="label">My points</span><span class="icon-wrap wrap-copper">🏆</span></div><div class="value" id="statEarnedPoints">—</div><div class="value-sub" id="statPendingPoints"></div></div>
       </div>
       <div class="panel">
-        <div class="panel-head"><h3>Recent tickets</h3><button class="btn-ghost" id="homeViewAllBtn">View all →</button></div>
-        <div class="ticket-row ticket-row-head">
-          <div class="ticket-id">ID</div>
-          <div class="ticket-main">Subject</div>
+        <div class="panel-head"><h3>Recent tasks</h3><button class="btn-ghost" id="homeViewAllBtn">View all →</button></div>
+        <div class="task-row task-row-head">
+          <div class="task-id">ID</div>
+          <div class="task-main">Subject</div>
           <div class="pbadge">Priority</div>
-          <div class="ticket-resp">Responsible</div>
-          <div class="ticket-assignee">Assigned to</div>
-          <div class="ticket-status-cell">Status</div>
+          <div class="points-chip" style="background:none;padding:0;color:var(--ink-soft)">Points</div>
+          <div class="task-persons task-resp">Responsible</div>
+          <div class="task-persons task-monitor">Monitoring</div>
+          <div class="task-status-cell">Status</div>
         </div>
-        <div id="recentTicketsList"></div>
+        <div id="recentTasksList"></div>
       </div>
     </section>
 
-    <section class="page" id="page-tickets">
+    <section class="page" id="page-tasks">
       <div class="page-head">
-        <div><h2>Tickets</h2><p>Every issue raised, filterable by status, priority, and person.</p></div>
-        <button class="btn-primary" style="width:auto" id="ticketsNewTicketBtn">+ New Ticket</button>
+        <div><h2>Tasks</h2><p>Every task, filterable by status, priority, and person.</p></div>
+        <button class="btn-primary" style="width:auto" id="tasksNewTaskBtn">+ New Task</button>
       </div>
       <div class="toolbar">
-        <input type="text" id="ticketSearch" placeholder="Search subject, ID, or person…">
+        <input type="text" id="taskSearch" placeholder="Search subject, ID, or person…">
         <select id="filterStatus"><option value="">All statuses</option></select>
         <select id="filterPriority"><option value="">All priorities</option></select>
         <button class="chip-toggle" id="filterMineToggle">Involving me</button>
       </div>
       <div class="panel" style="padding:0 20px 8px">
-        <div class="ticket-row ticket-row-head" id="ticketsHeadRow">
-          <div class="ticket-id sortable" data-sort-key="TicketID">ID<span class="sort-arrow"></span></div>
-          <div class="ticket-main sortable" data-sort-key="Subject">Subject<span class="sort-arrow"></span></div>
+        <div class="task-row task-row-head" id="tasksHeadRow">
+          <div class="task-id sortable" data-sort-key="TaskID">ID<span class="sort-arrow"></span></div>
+          <div class="task-main sortable" data-sort-key="Subject">Subject<span class="sort-arrow"></span></div>
           <div class="pbadge sortable" data-sort-key="Priority">Priority<span class="sort-arrow"></span></div>
-          <div class="ticket-resp sortable" data-sort-key="ResponsiblePerson">Responsible<span class="sort-arrow"></span></div>
-          <div class="ticket-assignee sortable" data-sort-key="AssignedTo">Assigned to<span class="sort-arrow"></span></div>
-          <div class="ticket-status-cell sortable" data-sort-key="Status">Status<span class="sort-arrow"></span></div>
+          <div class="points-chip sortable" data-sort-key="Points" style="background:none;padding:0;color:var(--ink-soft)">Points<span class="sort-arrow"></span></div>
+          <div class="task-persons task-resp sortable" data-sort-key="ResponsiblePerson">Responsible<span class="sort-arrow"></span></div>
+          <div class="task-persons task-monitor sortable" data-sort-key="MonitoringPerson">Monitoring<span class="sort-arrow"></span></div>
+          <div class="task-status-cell sortable" data-sort-key="Status">Status<span class="sort-arrow"></span></div>
         </div>
-        <div id="ticketsList"></div>
+        <div id="tasksList"></div>
       </div>
     </section>
 
     <section class="page" id="page-users">
       <div class="page-head">
-        <div><h2>Team &amp; Access</h2><p>Add and manage the people who use this app.</p></div>
+        <div><h2>Team &amp; Access</h2><p>Add and manage the people who use this app, and see their points.</p></div>
         <button class="btn-primary" style="width:auto" id="addUserBtn">+ Add person</button>
       </div>
       <div class="panel" style="padding-top:8px">
         <table class="users-table">
-          <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Department</th><th>Email</th><th>Status</th><th></th></tr></thead>
+          <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Department</th><th>Email</th><th>Pending pts</th><th>Earned pts</th><th>Status</th><th></th></tr></thead>
           <tbody id="usersTableBody"></tbody>
         </table>
       </div>
@@ -611,23 +636,23 @@
    Single-file PWA frontend. No build step, no framework.
    ============================================================ */
 const GOOGLE_API_URL = 'https://script.google.com/macros/s/AKfycbzHRIcBXUANi7wRTOxgn7DooK1UJ65toeSJ792LwXocAD2o72FNQRA2fkNv7FRy2uel/exec';
-const APP_VERSION = '1.0.2';
+const APP_VERSION = '2.0.0';
 const APP_NAME = 'Calgas Tasks';
 const COMPANY_NAME = 'CALGAS CAPACITORS';
 const COMPANY_LOGO_ICON_URL = 'https://i.postimg.cc/HxdkG3R1/CALGAS-CAPACITORS-LOGO-192x192.jpg';
 const COMPANY_LOGO_FULL_URL = 'https://i.postimg.cc/76wZvXdD/CALGAS-CAPACITORS-LOGO-512x512.jpg';
 
-const STATUSES = ['Open', 'In Progress', 'Resolved', 'Closed', 'Cancelled'];
+const STATUSES = ['Open', 'In Progress', 'Completed', 'Closed', 'Cancelled'];
 const PRIORITIES = ['Low', 'Medium', 'High', 'Urgent'];
-const FORWARD_TRANSITIONS = { 'Open': ['In Progress'], 'In Progress': ['Resolved'], 'Resolved': ['Closed', 'Open'] };
+const FORWARD_TRANSITIONS = { 'Open': ['In Progress'], 'In Progress': ['Completed'], 'Completed': ['Closed', 'Open'] };
 
 let state = {
   session: null,
   users: [],
-  tickets: [],
+  tasks: [],
   filters: { status: '', priority: '', scope: '', search: '' },
   sort: { key: null, dir: 'asc' },
-  currentTicketId: null
+  currentTaskId: null
 };
 
 // ---------- API wrapper ----------
@@ -667,17 +692,17 @@ function loadingStateHtml(label) {
 }
 
 // ---------- Session ----------
-function saveSession(session) { state.session = session; localStorage.setItem('helpdesk_session', JSON.stringify(session)); }
+function saveSession(session) { state.session = session; localStorage.setItem('calgastasks_session', JSON.stringify(session)); }
 function loadSession() {
-  const raw = localStorage.getItem('helpdesk_session');
+  const raw = localStorage.getItem('calgastasks_session');
   if (!raw) return null;
   try { return JSON.parse(raw); } catch (e) { return null; }
 }
-function clearSession() { state.session = null; localStorage.removeItem('helpdesk_session'); }
+function clearSession() { state.session = null; localStorage.removeItem('calgastasks_session'); }
 
 // ---------- Theme ----------
 function applyTheme() {
-  const saved = localStorage.getItem('helpdesk_theme');
+  const saved = localStorage.getItem('calgastasks_theme');
   if (saved === 'dark') {
     document.documentElement.setAttribute('data-theme', 'dark');
     document.getElementById('metaThemeColor').setAttribute('content', '#14171c');
@@ -687,11 +712,11 @@ function toggleTheme() {
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
   if (isDark) {
     document.documentElement.removeAttribute('data-theme');
-    localStorage.setItem('helpdesk_theme', 'light');
+    localStorage.setItem('calgastasks_theme', 'light');
     document.getElementById('metaThemeColor').setAttribute('content', '#f3f0ea');
   } else {
     document.documentElement.setAttribute('data-theme', 'dark');
-    localStorage.setItem('helpdesk_theme', 'dark');
+    localStorage.setItem('calgastasks_theme', 'dark');
     document.getElementById('metaThemeColor').setAttribute('content', '#14171c');
   }
   updateThemeIcons();
@@ -728,7 +753,7 @@ function switchPage(pageKey) {
     l.classList.toggle('active', l.dataset.page === pageKey);
   });
   if (pageKey === 'home') refreshHome();
-  if (pageKey === 'tickets') refreshTicketsList();
+  if (pageKey === 'tasks') refreshTasksList();
   if (pageKey === 'users') refreshUsers();
 }
 
@@ -862,27 +887,27 @@ document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme)
 document.querySelectorAll('.nav-link[data-page]').forEach(function (link) {
   link.addEventListener('click', function (e) { e.preventDefault(); switchPage(link.dataset.page); });
 });
-document.getElementById('navNewTicket').addEventListener('click', function (e) { e.preventDefault(); openNewTicketModal(); });
-document.getElementById('homeNewTicketBtn').addEventListener('click', openNewTicketModal);
-document.getElementById('ticketsNewTicketBtn').addEventListener('click', openNewTicketModal);
-document.getElementById('homeViewAllBtn').addEventListener('click', function () { switchPage('tickets'); });
+document.getElementById('navNewTask').addEventListener('click', function (e) { e.preventDefault(); openNewTaskModal(); });
+document.getElementById('homeNewTaskBtn').addEventListener('click', openNewTaskModal);
+document.getElementById('tasksNewTaskBtn').addEventListener('click', openNewTaskModal);
+document.getElementById('homeViewAllBtn').addEventListener('click', function () { switchPage('tasks'); });
 
 document.querySelectorAll('.stat-card[data-goto-status]').forEach(function (card) {
   card.addEventListener('click', function () {
     state.filters.status = card.dataset.gotoStatus || '';
     state.filters.scope = '';
-    switchPage('tickets');
+    switchPage('tasks');
     document.getElementById('filterStatus').value = state.filters.status;
     document.getElementById('filterMineToggle').classList.remove('active');
-    refreshTicketsList();
+    refreshTasksList();
   });
 });
 document.querySelector('.stat-card[data-goto-scope="mine"]').addEventListener('click', function () {
   state.filters.status = ''; state.filters.scope = 'mine';
-  switchPage('tickets');
+  switchPage('tasks');
   document.getElementById('filterStatus').value = '';
   document.getElementById('filterMineToggle').classList.add('active');
-  refreshTicketsList();
+  refreshTasksList();
 });
 
 // ---------- Render app shell ----------
@@ -907,9 +932,19 @@ function escapeHtml(str) {
     return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
   });
 }
+function parsePersonsClient(str) {
+  return String(str || '').split(',').map(function (s) { return s.trim(); }).filter(function (s) { return !!s; });
+}
+function personsInclude(str, username) {
+  return parsePersonsClient(str).indexOf(username) >= 0;
+}
 function userName(username) {
   const u = state.users.find(function (x) { return x.username === username; });
   return u ? u.name : username;
+}
+function personNames(commaSeparated) {
+  const names = parsePersonsClient(commaSeparated).map(function (u) { return userName(u); });
+  return names.length ? names.join(', ') : '—';
 }
 function initials(name) {
   const parts = String(name || '?').trim().split(/\s+/);
@@ -923,14 +958,17 @@ function fmtDate(iso) {
   if (isNaN(d.getTime())) return '—';
   return d.toLocaleDateString(undefined, { day: '2-digit', month: 'short', year: 'numeric' }) + ' ' + d.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
 }
-
-function userOptionsHtml(selected) {
-  return state.users.map(function (u) {
-    return '<option value="' + escapeHtml(u.username) + '"' + (u.username === selected ? ' selected' : '') + '>' + escapeHtml(u.name) + '</option>';
-  }).join('');
-}
+function pointsLabel(n) { n = parseFloat(n) || 0; return n + (n === 1 ? ' pt' : ' pts'); }
 
 // ---------- Attachments ----------
+// Only a Drive file ID is stored server-side; these build the two URLs we
+// need from it. The thumbnail endpoint renders reliably inline (the plain
+// file-download link often shows Drive's virus-scan interstitial instead of
+// the image itself), while the /view link gives a proper full-size viewer
+// for the click-through.
+function attachmentPreviewUrl(fileId) { return 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(fileId) + '&sz=w1600'; }
+function attachmentViewUrl(fileId) { return 'https://drive.google.com/file/d/' + encodeURIComponent(fileId) + '/view'; }
+
 // Resizes to a max dimension and re-encodes as JPEG client-side, so a
 // multi-MB phone photo turns into a small upload regardless of how the
 // original was shot.
@@ -1001,49 +1039,131 @@ function setupAttachmentPicker(inputId, previewId, imgId, removeId, attachLabelE
   };
 }
 
+// ---------- Multi-select (Excel-filter style: search + checkboxes) ----------
+// Single shared listener closes any open panel on an outside click, rather
+// than each instance registering its own — modals get created/destroyed
+// repeatedly during a session, and per-instance listeners would otherwise
+// pile up on `document` after their root element is gone.
+document.addEventListener('click', function (e) {
+  document.querySelectorAll('.multiselect.open').forEach(function (root) {
+    if (!root.contains(e.target)) {
+      root.classList.remove('open');
+      const p = root.querySelector('.multiselect-panel');
+      if (p) p.classList.add('hidden');
+    }
+  });
+});
+
+function createMultiSelect(rootId, users, placeholder) {
+  const root = document.getElementById(rootId);
+  root.classList.add('multiselect');
+  root.innerHTML =
+    '<button type="button" class="multiselect-trigger"><span class="multiselect-trigger-text placeholder">' + escapeHtml(placeholder) + '</span>' +
+    '<svg class="multiselect-chevron" width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+    '<div class="multiselect-panel hidden">' +
+      '<input type="text" class="multiselect-search" placeholder="Search people…">' +
+      '<div class="multiselect-actions"><button type="button" data-action="all">Select all</button><button type="button" data-action="none">Clear</button></div>' +
+      '<div class="multiselect-options"></div>' +
+    '</div>';
+  const trigger = root.querySelector('.multiselect-trigger');
+  const triggerText = root.querySelector('.multiselect-trigger-text');
+  const panel = root.querySelector('.multiselect-panel');
+  const search = root.querySelector('.multiselect-search');
+  const optionsEl = root.querySelector('.multiselect-options');
+  const actionBtns = root.querySelectorAll('.multiselect-actions button');
+  let selected = [];
+
+  function renderOptions(filter) {
+    const q = (filter || '').toLowerCase();
+    const filtered = users.filter(function (u) { return u.name.toLowerCase().indexOf(q) >= 0; });
+    if (!filtered.length) { optionsEl.innerHTML = '<div class="multiselect-empty">No matches.</div>'; return; }
+    optionsEl.innerHTML = filtered.map(function (u) {
+      const checked = selected.indexOf(u.username) >= 0 ? ' checked' : '';
+      return '<label class="multiselect-option"><input type="checkbox" value="' + escapeHtml(u.username) + '"' + checked + '>' + escapeHtml(u.name) + '</label>';
+    }).join('');
+    optionsEl.querySelectorAll('input[type="checkbox"]').forEach(function (cb) {
+      cb.addEventListener('change', function () {
+        if (cb.checked) { if (selected.indexOf(cb.value) < 0) selected.push(cb.value); }
+        else { selected = selected.filter(function (s) { return s !== cb.value; }); }
+        updateTriggerText();
+      });
+    });
+  }
+  function updateTriggerText() {
+    if (!selected.length) { triggerText.textContent = placeholder; triggerText.classList.add('placeholder'); return; }
+    triggerText.classList.remove('placeholder');
+    triggerText.textContent = selected.map(function (uname) { return userName(uname); }).join(', ');
+  }
+  trigger.addEventListener('click', function (e) {
+    e.stopPropagation();
+    const willOpen = panel.classList.contains('hidden');
+    document.querySelectorAll('.multiselect-panel').forEach(function (p) { p.classList.add('hidden'); });
+    document.querySelectorAll('.multiselect.open').forEach(function (m) { m.classList.remove('open'); });
+    if (willOpen) { panel.classList.remove('hidden'); root.classList.add('open'); search.value = ''; renderOptions(''); search.focus(); }
+  });
+  search.addEventListener('input', function () { renderOptions(search.value); });
+  actionBtns.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      selected = btn.dataset.action === 'all' ? users.map(function (u) { return u.username; }) : [];
+      renderOptions(search.value);
+      updateTriggerText();
+    });
+  });
+  renderOptions('');
+  updateTriggerText();
+
+  return {
+    getSelected: function () { return selected.slice(); },
+    setSelected: function (arr) { selected = (arr || []).slice(); renderOptions(search.value); updateTriggerText(); }
+  };
+}
+
 // ---------- Home ----------
 async function refreshHome() {
-  document.getElementById('recentTicketsList').innerHTML = loadingStateHtml('Loading tickets…');
+  document.getElementById('recentTasksList').innerHTML = loadingStateHtml('Loading tasks…');
   document.querySelectorAll('#page-home .stat-card .value').forEach(function (el) { el.textContent = '—'; });
   try {
     const stats = await api('dashboardStats', {});
     document.getElementById('statTotal').textContent = stats.total;
     document.getElementById('statOpen').textContent = stats.byStatus['Open'];
     document.getElementById('statInProgress').textContent = stats.byStatus['In Progress'];
-    document.getElementById('statResolved').textContent = stats.byStatus['Resolved'];
+    document.getElementById('statCompleted').textContent = stats.byStatus['Completed'];
     document.getElementById('statClosed').textContent = stats.byStatus['Closed'];
     document.getElementById('statMine').textContent = stats.mine;
+    document.getElementById('statEarnedPoints').textContent = pointsLabel(stats.myEarnedPoints);
+    document.getElementById('statPendingPoints').textContent = pointsLabel(stats.myPendingPoints) + ' pending';
 
-    const result = await api('listTickets', {});
-    state.tickets = result.tickets;
-    const recent = result.tickets.slice(0, 6);
-    const listEl = document.getElementById('recentTicketsList');
+    const result = await api('listTasks', {});
+    state.tasks = result.tasks;
+    const recent = result.tasks.slice(0, 6);
+    const listEl = document.getElementById('recentTasksList');
     if (!recent.length) {
-      listEl.innerHTML = '<div class="empty-state">No tickets yet. Raise the first one.</div>';
+      listEl.innerHTML = '<div class="empty-state">No tasks yet. Create the first one.</div>';
     } else {
-      listEl.innerHTML = recent.map(ticketRowHtml).join('');
-      attachTicketRowHandlers(listEl);
+      listEl.innerHTML = recent.map(taskRowHtml).join('');
+      attachTaskRowHandlers(listEl);
     }
   } catch (err) {
-    document.getElementById('recentTicketsList').innerHTML = '<div class="empty-state">Couldn\'t load tickets.</div>';
+    document.getElementById('recentTasksList').innerHTML = '<div class="empty-state">Couldn\'t load tasks.</div>';
     showToast(err.message, 'error');
   }
 }
 
-// ---------- Tickets list ----------
-function ticketRowHtml(t) {
-  return '<div class="ticket-row" data-ticket-id="' + escapeHtml(t.TicketID) + '">' +
-    '<div class="ticket-id">' + escapeHtml(t.TicketID) + '</div>' +
-    '<div class="ticket-main"><div class="ticket-subject">' + escapeHtml(t.Subject) + '</div><div class="ticket-meta">by ' + escapeHtml(t.RaisedByName) + ' · ' + fmtDate(t.CreatedAt) + '</div></div>' +
+// ---------- Tasks list ----------
+function taskRowHtml(t) {
+  return '<div class="task-row" data-task-id="' + escapeHtml(t.TaskID) + '">' +
+    '<div class="task-id">' + escapeHtml(t.TaskID) + '</div>' +
+    '<div class="task-main"><div class="task-subject">' + escapeHtml(t.Subject) + '</div><div class="task-meta">by ' + escapeHtml(t.RaisedByName) + ' · ' + fmtDate(t.CreatedAt) + '</div></div>' +
     '<div class="pbadge"><span class="pdot ' + priorityDotClass(t.Priority) + '"></span>' + escapeHtml(t.Priority) + '</div>' +
-    '<div class="ticket-resp muted" style="font-size:12.5px">' + escapeHtml(userName(t.ResponsiblePerson)) + '</div>' +
-    '<div class="ticket-assignee muted" style="font-size:12.5px">' + escapeHtml(userName(t.AssignedTo)) + '</div>' +
-    '<div class="ticket-status-cell"><span class="badge ' + statusBadgeClass(t.Status) + '">' + escapeHtml(t.Status) + '</span></div>' +
+    '<div class="points-chip">' + pointsLabel(t.Points) + '</div>' +
+    '<div class="task-persons task-resp">' + escapeHtml(personNames(t.ResponsiblePerson)) + '</div>' +
+    '<div class="task-persons task-monitor">' + escapeHtml(personNames(t.MonitoringPerson)) + '</div>' +
+    '<div class="task-status-cell"><span class="badge ' + statusBadgeClass(t.Status) + '">' + escapeHtml(t.Status) + '</span></div>' +
     '</div>';
 }
-function attachTicketRowHandlers(container) {
-  container.querySelectorAll('.ticket-row').forEach(function (row) {
-    row.addEventListener('click', function () { openTicketDetail(row.dataset.ticketId); });
+function attachTaskRowHandlers(container) {
+  container.querySelectorAll('.task-row').forEach(function (row) {
+    row.addEventListener('click', function () { openTaskDetail(row.dataset.taskId); });
   });
 }
 
@@ -1052,19 +1172,20 @@ function attachTicketRowHandlers(container) {
 // re-order what's already on screen.
 function sortValue(t, key) {
   switch (key) {
-    case 'TicketID': return t.TicketID;
+    case 'TaskID': return t.TaskID;
     case 'Subject': return String(t.Subject || '').toLowerCase();
     case 'Priority': return PRIORITIES.indexOf(t.Priority);
-    case 'ResponsiblePerson': return userName(t.ResponsiblePerson).toLowerCase();
-    case 'AssignedTo': return userName(t.AssignedTo).toLowerCase();
+    case 'Points': return parseFloat(t.Points) || 0;
+    case 'ResponsiblePerson': return personNames(t.ResponsiblePerson).toLowerCase();
+    case 'MonitoringPerson': return personNames(t.MonitoringPerson).toLowerCase();
     case 'Status': return STATUSES.indexOf(t.Status);
     default: return '';
   }
 }
-function sortTickets(tickets) {
-  if (!state.sort.key) return tickets; // no explicit sort — keep server order (newest first)
+function sortTasks(tasks) {
+  if (!state.sort.key) return tasks; // no explicit sort — keep server order (newest first)
   var key = state.sort.key, dir = state.sort.dir;
-  var sorted = tickets.slice();
+  var sorted = tasks.slice();
   sorted.sort(function (a, b) {
     var av = sortValue(a, key), bv = sortValue(b, key);
     var cmp = av < bv ? -1 : av > bv ? 1 : 0;
@@ -1073,80 +1194,80 @@ function sortTickets(tickets) {
   return sorted;
 }
 function renderSortHeaders() {
-  document.querySelectorAll('#ticketsHeadRow .sortable').forEach(function (h) {
+  document.querySelectorAll('#tasksHeadRow .sortable').forEach(function (h) {
     const active = h.dataset.sortKey === state.sort.key;
     h.classList.toggle('sort-active', active);
     h.querySelector('.sort-arrow').textContent = active ? (state.sort.dir === 'asc' ? '▲' : '▼') : '';
   });
 }
-document.querySelectorAll('#ticketsHeadRow .sortable').forEach(function (h) {
+document.querySelectorAll('#tasksHeadRow .sortable').forEach(function (h) {
   h.addEventListener('click', function () {
     const key = h.dataset.sortKey;
     if (state.sort.key === key) { state.sort.dir = state.sort.dir === 'asc' ? 'desc' : 'asc'; }
     else { state.sort.key = key; state.sort.dir = 'asc'; }
     renderSortHeaders();
-    renderTicketsListFromState();
+    renderTasksListFromState();
   });
 });
 
-function renderTicketsListFromState() {
-  const listEl = document.getElementById('ticketsList');
-  const sorted = sortTickets(state.tickets);
+function renderTasksListFromState() {
+  const listEl = document.getElementById('tasksList');
+  const sorted = sortTasks(state.tasks);
   if (!sorted.length) {
-    listEl.innerHTML = '<div class="empty-state">No tickets match these filters.</div>';
+    listEl.innerHTML = '<div class="empty-state">No tasks match these filters.</div>';
   } else {
-    listEl.innerHTML = sorted.map(ticketRowHtml).join('');
-    attachTicketRowHandlers(listEl);
+    listEl.innerHTML = sorted.map(taskRowHtml).join('');
+    attachTaskRowHandlers(listEl);
   }
 }
 
-async function refreshTicketsList() {
-  document.getElementById('ticketsList').innerHTML = loadingStateHtml('Loading tickets…');
+async function refreshTasksList() {
+  document.getElementById('tasksList').innerHTML = loadingStateHtml('Loading tasks…');
   try {
     const params = {};
     if (state.filters.status) params.status = state.filters.status;
     if (state.filters.priority) params.priority = state.filters.priority;
     if (state.filters.scope) params.scope = state.filters.scope;
     if (state.filters.search) params.search = state.filters.search;
-    const result = await api('listTickets', params);
-    state.tickets = result.tickets;
-    renderTicketsListFromState();
+    const result = await api('listTasks', params);
+    state.tasks = result.tasks;
+    renderTasksListFromState();
   } catch (err) {
-    document.getElementById('ticketsList').innerHTML = '<div class="empty-state">Couldn\'t load tickets.</div>';
+    document.getElementById('tasksList').innerHTML = '<div class="empty-state">Couldn\'t load tasks.</div>';
     showToast(err.message, 'error');
   }
 }
 
-document.getElementById('ticketSearch').addEventListener('input', function () {
+document.getElementById('taskSearch').addEventListener('input', function () {
   state.filters.search = this.value.trim();
   clearTimeout(window._searchDebounce);
-  window._searchDebounce = setTimeout(refreshTicketsList, 250);
+  window._searchDebounce = setTimeout(refreshTasksList, 250);
 });
-document.getElementById('filterStatus').addEventListener('change', function () { state.filters.status = this.value; refreshTicketsList(); });
-document.getElementById('filterPriority').addEventListener('change', function () { state.filters.priority = this.value; refreshTicketsList(); });
+document.getElementById('filterStatus').addEventListener('change', function () { state.filters.status = this.value; refreshTasksList(); });
+document.getElementById('filterPriority').addEventListener('change', function () { state.filters.priority = this.value; refreshTasksList(); });
 document.getElementById('filterMineToggle').addEventListener('click', function () {
   const active = this.classList.toggle('active');
   state.filters.scope = active ? 'mine' : '';
-  refreshTicketsList();
+  refreshTasksList();
 });
 
-// ---------- New Ticket modal ----------
-function openNewTicketModal(e) {
+// ---------- New Task modal ----------
+function openNewTaskModal(e) {
   if (e && e.preventDefault) e.preventDefault();
   const html =
-    '<div class="modal-backdrop" id="newTicketBackdrop">' +
+    '<div class="modal-backdrop" id="newTaskBackdrop">' +
       '<div class="modal">' +
-        '<div class="modal-head"><h3>New ticket</h3><button class="modal-close" id="closeNewTicket">&times;</button></div>' +
-        '<form id="newTicketForm">' +
-          '<div class="field"><label>Subject</label><input type="text" id="ntSubject" required maxlength="120" placeholder="Short summary of the problem"></div>' +
-          '<div class="field"><label>Problem description</label><textarea id="ntDescription" rows="4" required placeholder="What happened, where, and since when?"></textarea></div>' +
+        '<div class="modal-head"><h3>New task</h3><button class="modal-close" id="closeNewTask">&times;</button></div>' +
+        '<form id="newTaskForm">' +
+          '<div class="field"><label>Subject</label><input type="text" id="ntSubject" required maxlength="120" placeholder="Short summary of the task"></div>' +
+          '<div class="field"><label>Description</label><textarea id="ntDescription" rows="4" required placeholder="What needs to be done, and any relevant details?"></textarea></div>' +
           '<div class="field-row">' +
             '<div class="field"><label>Priority</label><select id="ntPriority">' + PRIORITIES.map(function (p) { return '<option value="' + p + '"' + (p === 'Medium' ? ' selected' : '') + '>' + p + '</option>'; }).join('') + '</select></div>' +
-            '<div class="field"></div>' +
+            '<div class="field"><label>Points</label><input type="number" id="ntPoints" min="0" step="1" value="0"></div>' +
           '</div>' +
           '<div class="field-row">' +
-            '<div class="field"><label>Responsible person</label><select id="ntResponsible" required><option value="">Select…</option>' + userOptionsHtml('') + '</select><div class="hint">Who is accountable for this issue/area.</div></div>' +
-            '<div class="field"><label>Assigned to (seeking help from)</label><select id="ntAssigned" required><option value="">Select…</option>' + userOptionsHtml('') + '</select><div class="hint">Who you want to fix it.</div></div>' +
+            '<div class="field"><label>Responsible person(s)</label><div class="multiselect" id="ntResponsibleMS"></div><div class="hint">Who is accountable for getting this done.</div></div>' +
+            '<div class="field"><label>Monitoring person(s)</label><div class="multiselect" id="ntMonitoringMS"></div><div class="hint">Who monitors and helps the responsible person.</div></div>' +
           '</div>' +
           '<div class="field">' +
             '<label>Photo (optional)</label>' +
@@ -1157,72 +1278,81 @@ function openNewTicketModal(e) {
             '</div>' +
           '</div>' +
           '<div class="form-error" id="ntError"></div>' +
-          '<div class="modal-actions"><button type="button" class="btn-secondary" id="cancelNewTicket">Cancel</button><button type="submit" class="btn-primary" style="width:auto" id="ntSubmit">Raise ticket</button></div>' +
+          '<div class="modal-actions"><button type="button" class="btn-secondary" id="cancelNewTask">Cancel</button><button type="submit" class="btn-primary" style="width:auto" id="ntSubmit">Create task</button></div>' +
         '</form>' +
       '</div>' +
     '</div>';
   document.body.insertAdjacentHTML('beforeend', html);
-  const backdrop = document.getElementById('newTicketBackdrop');
+  const backdrop = document.getElementById('newTaskBackdrop');
   backdrop.addEventListener('click', function (e2) { if (e2.target === backdrop) backdrop.remove(); });
-  document.getElementById('closeNewTicket').addEventListener('click', function () { backdrop.remove(); });
-  document.getElementById('cancelNewTicket').addEventListener('click', function () { backdrop.remove(); });
+  document.getElementById('closeNewTask').addEventListener('click', function () { backdrop.remove(); });
+  document.getElementById('cancelNewTask').addEventListener('click', function () { backdrop.remove(); });
+
+  const responsibleMS = createMultiSelect('ntResponsibleMS', state.users, 'Select…');
+  const monitoringMS = createMultiSelect('ntMonitoringMS', state.users, 'Select…');
   const ntAttachment = setupAttachmentPicker('ntAttachment', 'ntAttachmentPreview', 'ntAttachmentImg', 'ntAttachmentRemove', document.getElementById('ntAttachLabel'));
-  document.getElementById('newTicketForm').addEventListener('submit', async function (e2) {
+
+  document.getElementById('newTaskForm').addEventListener('submit', async function (e2) {
     e2.preventDefault();
     const btn = document.getElementById('ntSubmit');
     const errEl = document.getElementById('ntError');
     errEl.textContent = '';
-    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Raising…';
+    const responsible = responsibleMS.getSelected();
+    const monitoring = monitoringMS.getSelected();
+    if (!responsible.length) { errEl.textContent = 'Select at least one responsible person.'; return; }
+    if (!monitoring.length) { errEl.textContent = 'Select at least one monitoring person.'; return; }
+    btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Creating…';
     try {
       const attachment = ntAttachment.getAttachment();
-      const result = await api('createTicket', {
+      const result = await api('createTask', {
         subject: document.getElementById('ntSubject').value.trim(),
         description: document.getElementById('ntDescription').value.trim(),
         priority: document.getElementById('ntPriority').value,
-        responsiblePerson: document.getElementById('ntResponsible').value,
-        assignedTo: document.getElementById('ntAssigned').value,
+        points: document.getElementById('ntPoints').value,
+        responsiblePersons: responsible,
+        monitoringPersons: monitoring,
         attachmentBase64: attachment ? attachment.base64 : undefined,
         attachmentMimeType: attachment ? attachment.mimeType : undefined
       });
       backdrop.remove();
-      showToast('Ticket ' + result.ticketId + ' raised.', 'ok');
-      switchPage('tickets');
+      showToast('Task ' + result.taskId + ' created.', 'ok');
+      switchPage('tasks');
     } catch (err) {
       errEl.textContent = err.message;
-      btn.disabled = false; btn.textContent = 'Raise ticket';
+      btn.disabled = false; btn.textContent = 'Create task';
     }
   });
 }
 
-// ---------- Ticket detail modal ----------
-function showTicketDetailLoadingModal() {
-  const existing = document.getElementById('ticketDetailBackdrop');
+// ---------- Task detail modal ----------
+function showTaskDetailLoadingModal() {
+  const existing = document.getElementById('taskDetailBackdrop');
   if (existing) existing.remove();
-  const html = '<div class="modal-backdrop" id="ticketDetailBackdrop">' +
-      '<div class="modal modal-wide"><div class="modal-loading"><span class="spinner spinner-dark"></span>Loading ticket…</div></div>' +
+  const html = '<div class="modal-backdrop" id="taskDetailBackdrop">' +
+      '<div class="modal modal-wide"><div class="modal-loading"><span class="spinner spinner-dark"></span>Loading task…</div></div>' +
     '</div>';
   document.body.insertAdjacentHTML('beforeend', html);
-  document.getElementById('ticketDetailBackdrop').addEventListener('click', function (e) {
+  document.getElementById('taskDetailBackdrop').addEventListener('click', function (e) {
     if (e.target === this) this.remove();
   });
 }
 
-async function openTicketDetail(ticketId) {
-  state.currentTicketId = ticketId;
-  showTicketDetailLoadingModal();
+async function openTaskDetail(taskId) {
+  state.currentTaskId = taskId;
+  showTaskDetailLoadingModal();
   try {
-    const result = await api('getTicket', { ticketId: ticketId });
-    renderTicketDetailModal(result.ticket, result.updates);
+    const result = await api('getTask', { taskId: taskId });
+    renderTaskDetailModal(result.task, result.updates);
   } catch (err) {
-    const existing = document.getElementById('ticketDetailBackdrop');
+    const existing = document.getElementById('taskDetailBackdrop');
     if (existing) existing.remove();
     showToast(err.message, 'error');
   }
 }
 
-function renderTicketDetailModal(t, updates) {
+function renderTaskDetailModal(t, updates) {
   const isAdmin = state.session.role === 'Admin';
-  const isOwner = t.ResponsiblePerson === state.session.username || t.AssignedTo === state.session.username;
+  const isOwner = personsInclude(t.ResponsiblePerson, state.session.username) || personsInclude(t.MonitoringPerson, state.session.username);
   const canChangeStatus = isAdmin || isOwner;
 
   let statusButtons = '';
@@ -1234,13 +1364,13 @@ function renderTicketDetailModal(t, updates) {
       options = FORWARD_TRANSITIONS[t.Status] || [];
     }
     statusButtons = options.map(function (s) {
-      return '<button class="status-btn' + (s === 'Resolved' || s === 'Closed' ? ' primary' : '') + '" data-set-status="' + escapeHtml(s) + '">Mark ' + escapeHtml(s) + '</button>';
+      return '<button class="status-btn' + (s === 'Completed' || s === 'Closed' ? ' primary' : '') + '" data-set-status="' + escapeHtml(s) + '">Mark ' + escapeHtml(s) + '</button>';
     }).join('');
   }
 
   const timelineHtml = updates.map(function (u) {
     const statusChip = u.StatusTo ? '<span class="timeline-status-chip">' + escapeHtml(u.StatusFrom ? (u.StatusFrom + ' → ' + u.StatusTo) : u.StatusTo) + '</span>' : '';
-    const attachmentHtml = u.AttachmentURL ? '<a class="timeline-attachment" href="' + escapeHtml(u.AttachmentURL) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(u.AttachmentURL) + '" alt="Attachment"></a>' : '';
+    const attachmentHtml = u.AttachmentFileID ? '<a class="timeline-attachment" href="' + attachmentViewUrl(u.AttachmentFileID) + '" target="_blank" rel="noopener"><img src="' + attachmentPreviewUrl(u.AttachmentFileID) + '" alt="Attachment"></a>' : '';
     return '<div class="timeline-item">' +
       '<div class="timeline-avatar">' + escapeHtml(initials(u.AuthorName)).toUpperCase() + '</div>' +
       '<div class="timeline-body">' +
@@ -1250,29 +1380,30 @@ function renderTicketDetailModal(t, updates) {
       '</div></div>';
   }).join('');
 
-  const ticketAttachmentHtml = t.AttachmentURL ? '<a class="ticket-attachment" href="' + escapeHtml(t.AttachmentURL) + '" target="_blank" rel="noopener"><img src="' + escapeHtml(t.AttachmentURL) + '" alt="Attachment"></a>' : '';
+  const taskAttachmentHtml = t.AttachmentFileID ? '<a class="task-attachment" href="' + attachmentViewUrl(t.AttachmentFileID) + '" target="_blank" rel="noopener"><img src="' + attachmentPreviewUrl(t.AttachmentFileID) + '" alt="Attachment"></a>' : '';
 
   const html =
-    '<div class="modal-backdrop" id="ticketDetailBackdrop">' +
+    '<div class="modal-backdrop" id="taskDetailBackdrop">' +
       '<div class="modal modal-wide">' +
         '<div class="modal-head">' +
-          '<div><div class="ticket-detail-id">' + escapeHtml(t.TicketID) + '</div><h3>' + escapeHtml(t.Subject) + '</h3></div>' +
-          '<button class="modal-close" id="closeTicketDetail">&times;</button>' +
+          '<div><div class="mono muted" style="font-size:12px;margin-bottom:4px">' + escapeHtml(t.TaskID) + '</div><h3>' + escapeHtml(t.Subject) + '</h3></div>' +
+          '<button class="modal-close" id="closeTaskDetail">&times;</button>' +
         '</div>' +
-        '<div style="display:flex;gap:8px;align-items:center;margin-bottom:14px">' +
+        '<div style="display:flex;gap:8px;align-items:center;margin-bottom:14px;flex-wrap:wrap">' +
           '<span class="badge ' + statusBadgeClass(t.Status) + '">' + escapeHtml(t.Status) + '</span>' +
           '<span class="pbadge"><span class="pdot ' + priorityDotClass(t.Priority) + '"></span>' + escapeHtml(t.Priority) + ' priority</span>' +
+          '<span class="points-chip">' + pointsLabel(t.Points) + '</span>' +
         '</div>' +
-        '<div class="ticket-detail-desc">' + escapeHtml(t.Description) + '</div>' +
-        ticketAttachmentHtml +
+        '<div class="task-detail-desc">' + escapeHtml(t.Description) + '</div>' +
+        taskAttachmentHtml +
         '<div class="kv-grid" style="margin-top:16px">' +
           '<div class="kv-item"><div class="kv-label">Raised by</div><div class="kv-value">' + escapeHtml(t.RaisedByName) + (t.RaisedByDept ? ' · ' + escapeHtml(t.RaisedByDept) : '') + '</div></div>' +
           '<div class="kv-item"><div class="kv-label">Raised on</div><div class="kv-value">' + fmtDate(t.CreatedAt) + '</div></div>' +
-          '<div class="kv-item"><div class="kv-label">Responsible person</div><div class="kv-value">' + escapeHtml(userName(t.ResponsiblePerson)) + '</div></div>' +
-          '<div class="kv-item"><div class="kv-label">Assigned to</div><div class="kv-value">' + escapeHtml(userName(t.AssignedTo)) + '</div></div>' +
-          (t.ResolvedAt ? '<div class="kv-item"><div class="kv-label">Resolved on</div><div class="kv-value">' + fmtDate(t.ResolvedAt) + '</div></div>' : '') +
+          '<div class="kv-item"><div class="kv-label">Responsible person(s)</div><div class="kv-value">' + escapeHtml(personNames(t.ResponsiblePerson)) + '</div></div>' +
+          '<div class="kv-item"><div class="kv-label">Monitoring person(s)</div><div class="kv-value">' + escapeHtml(personNames(t.MonitoringPerson)) + '</div></div>' +
+          (t.CompletedAt ? '<div class="kv-item"><div class="kv-label">Completed on</div><div class="kv-value">' + fmtDate(t.CompletedAt) + '</div></div>' : '') +
         '</div>' +
-        (isAdmin ? '<button class="btn-ghost" id="editTicketBtn" style="margin-bottom:12px">✎ Edit ticket details</button>' : '') +
+        (isAdmin ? '<button class="btn-ghost" id="editTaskBtn" style="margin-bottom:12px">✎ Edit task details</button>' : '') +
         (statusButtons ? '<div class="status-actions">' + statusButtons + '</div>' : '') +
         '<div class="timeline"><div class="timeline-title">Activity</div>' + timelineHtml + '</div>' +
         '<div class="comment-box">' +
@@ -1286,21 +1417,21 @@ function renderTicketDetailModal(t, updates) {
       '</div>' +
     '</div>';
 
-  const existing = document.getElementById('ticketDetailBackdrop');
+  const existing = document.getElementById('taskDetailBackdrop');
   if (existing) existing.remove();
   document.body.insertAdjacentHTML('beforeend', html);
-  const backdrop = document.getElementById('ticketDetailBackdrop');
+  const backdrop = document.getElementById('taskDetailBackdrop');
   backdrop.addEventListener('click', function (e) { if (e.target === backdrop) backdrop.remove(); });
-  document.getElementById('closeTicketDetail').addEventListener('click', function () { backdrop.remove(); });
+  document.getElementById('closeTaskDetail').addEventListener('click', function () { backdrop.remove(); });
 
   backdrop.querySelectorAll('[data-set-status]').forEach(function (btn) {
     btn.addEventListener('click', async function () {
       btn.disabled = true;
       try {
-        await api('updateStatus', { ticketId: t.TicketID, newStatus: btn.dataset.setStatus });
+        await api('updateStatus', { taskId: t.TaskID, newStatus: btn.dataset.setStatus });
         showToast('Status updated.', 'ok');
-        openTicketDetail(t.TicketID);
-        refreshTicketsList(); refreshHome();
+        openTaskDetail(t.TaskID);
+        refreshTasksList(); refreshHome();
       } catch (err) { showToast(err.message, 'error'); btn.disabled = false; }
     });
   });
@@ -1313,74 +1444,85 @@ function renderTicketDetailModal(t, updates) {
     this.disabled = true;
     try {
       await api('addComment', {
-        ticketId: t.TicketID, comment: text,
+        taskId: t.TaskID, comment: text,
         attachmentBase64: attachment ? attachment.base64 : undefined,
         attachmentMimeType: attachment ? attachment.mimeType : undefined
       });
-      openTicketDetail(t.TicketID);
+      openTaskDetail(t.TaskID);
     } catch (err) { showToast(err.message, 'error'); this.disabled = false; }
   });
 
-  const editBtn = document.getElementById('editTicketBtn');
-  if (editBtn) editBtn.addEventListener('click', function () { openEditTicketModal(t); });
+  const editBtn = document.getElementById('editTaskBtn');
+  if (editBtn) editBtn.addEventListener('click', function () { openEditTaskModal(t); });
 }
 
-function openEditTicketModal(t) {
+function openEditTaskModal(t) {
   const html =
-    '<div class="modal-backdrop" id="editTicketBackdrop">' +
+    '<div class="modal-backdrop" id="editTaskBackdrop">' +
       '<div class="modal">' +
-        '<div class="modal-head"><h3>Edit ' + escapeHtml(t.TicketID) + '</h3><button class="modal-close" id="closeEditTicket">&times;</button></div>' +
-        '<form id="editTicketForm">' +
+        '<div class="modal-head"><h3>Edit ' + escapeHtml(t.TaskID) + '</h3><button class="modal-close" id="closeEditTask">&times;</button></div>' +
+        '<form id="editTaskForm">' +
           '<div class="field"><label>Subject</label><input type="text" id="etSubject" value="' + escapeHtml(t.Subject) + '" required></div>' +
-          '<div class="field"><label>Problem description</label><textarea id="etDescription" rows="4" required>' + escapeHtml(t.Description) + '</textarea></div>' +
+          '<div class="field"><label>Description</label><textarea id="etDescription" rows="4" required>' + escapeHtml(t.Description) + '</textarea></div>' +
           '<div class="field-row">' +
             '<div class="field"><label>Priority</label><select id="etPriority">' + PRIORITIES.map(function (p) { return '<option value="' + p + '"' + (p === t.Priority ? ' selected' : '') + '>' + p + '</option>'; }).join('') + '</select></div>' +
-            '<div class="field"></div>' +
+            '<div class="field"><label>Points</label><input type="number" id="etPoints" min="0" step="1" value="' + (parseFloat(t.Points) || 0) + '"></div>' +
           '</div>' +
           '<div class="field-row">' +
-            '<div class="field"><label>Responsible person</label><select id="etResponsible">' + userOptionsHtml(t.ResponsiblePerson) + '</select></div>' +
-            '<div class="field"><label>Assigned to</label><select id="etAssigned">' + userOptionsHtml(t.AssignedTo) + '</select></div>' +
+            '<div class="field"><label>Responsible person(s)</label><div class="multiselect" id="etResponsibleMS"></div></div>' +
+            '<div class="field"><label>Monitoring person(s)</label><div class="multiselect" id="etMonitoringMS"></div></div>' +
           '</div>' +
           '<div class="form-error" id="etError"></div>' +
           '<div class="modal-actions">' +
-            '<button type="button" class="btn-danger" id="cancelTicketBtn">Cancel this ticket</button>' +
+            '<button type="button" class="btn-danger" id="cancelTaskBtn">Cancel this task</button>' +
             '<button type="submit" class="btn-primary" style="width:auto" id="etSubmit">Save changes</button>' +
           '</div>' +
         '</form>' +
       '</div>' +
     '</div>';
   document.body.insertAdjacentHTML('beforeend', html);
-  const backdrop = document.getElementById('editTicketBackdrop');
+  const backdrop = document.getElementById('editTaskBackdrop');
   backdrop.addEventListener('click', function (e) { if (e.target === backdrop) backdrop.remove(); });
-  document.getElementById('closeEditTicket').addEventListener('click', function () { backdrop.remove(); });
+  document.getElementById('closeEditTask').addEventListener('click', function () { backdrop.remove(); });
 
-  document.getElementById('editTicketForm').addEventListener('submit', async function (e) {
+  const responsibleMS = createMultiSelect('etResponsibleMS', state.users, 'Select…');
+  responsibleMS.setSelected(parsePersonsClient(t.ResponsiblePerson));
+  const monitoringMS = createMultiSelect('etMonitoringMS', state.users, 'Select…');
+  monitoringMS.setSelected(parsePersonsClient(t.MonitoringPerson));
+
+  document.getElementById('editTaskForm').addEventListener('submit', async function (e) {
     e.preventDefault();
     const errEl = document.getElementById('etError'); errEl.textContent = '';
+    const responsible = responsibleMS.getSelected();
+    const monitoring = monitoringMS.getSelected();
+    if (!responsible.length) { errEl.textContent = 'Select at least one responsible person.'; return; }
+    if (!monitoring.length) { errEl.textContent = 'Select at least one monitoring person.'; return; }
     try {
-      await api('editTicket', {
-        ticketId: t.TicketID,
+      await api('editTask', {
+        taskId: t.TaskID,
         subject: document.getElementById('etSubject').value.trim(),
         description: document.getElementById('etDescription').value.trim(),
         priority: document.getElementById('etPriority').value,
-        responsiblePerson: document.getElementById('etResponsible').value,
-        assignedTo: document.getElementById('etAssigned').value
+        points: document.getElementById('etPoints').value,
+        responsiblePersons: responsible,
+        monitoringPersons: monitoring
       });
       backdrop.remove();
-      showToast('Ticket updated.', 'ok');
-      openTicketDetail(t.TicketID);
-      refreshTicketsList(); refreshHome();
+      showToast('Task updated.', 'ok');
+      openTaskDetail(t.TaskID);
+      refreshTasksList(); refreshHome();
     } catch (err) { errEl.textContent = err.message; }
   });
 
-  document.getElementById('cancelTicketBtn').addEventListener('click', async function () {
-    if (!confirm('Cancel ticket ' + t.TicketID + '? This marks it Cancelled.')) return;
+  document.getElementById('cancelTaskBtn').addEventListener('click', async function () {
+    if (!confirm('Cancel task ' + t.TaskID + '? This marks it Cancelled.')) return;
     try {
-      await api('updateStatus', { ticketId: t.TicketID, newStatus: 'Cancelled' });
+      await api('updateStatus', { taskId: t.TaskID, newStatus: 'Cancelled' });
       backdrop.remove();
-      document.getElementById('ticketDetailBackdrop').remove();
-      showToast('Ticket cancelled.', 'ok');
-      refreshTicketsList(); refreshHome();
+      const detailBackdrop = document.getElementById('taskDetailBackdrop');
+      if (detailBackdrop) detailBackdrop.remove();
+      showToast('Task cancelled.', 'ok');
+      refreshTasksList(); refreshHome();
     } catch (err) { showToast(err.message, 'error'); }
   });
 }
@@ -1388,7 +1530,7 @@ function openEditTicketModal(t) {
 // ---------- Team & Access (Admin) ----------
 async function refreshUsers() {
   if (state.session.role !== 'Admin') return;
-  document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="7"><div class="empty-state"><span class="spinner spinner-dark"></span>Loading people…</div></td></tr>';
+  document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="9"><div class="empty-state"><span class="spinner spinner-dark"></span>Loading people…</div></td></tr>';
   try {
     const result = await api('listUsers', {});
     const body = document.getElementById('usersTableBody');
@@ -1399,6 +1541,8 @@ async function refreshUsers() {
         '<td><span class="role-pill ' + u.role.toLowerCase() + '">' + escapeHtml(u.role) + '</span></td>' +
         '<td>' + escapeHtml(u.department) + '</td>' +
         '<td>' + escapeHtml(u.email) + '</td>' +
+        '<td class="mono">' + (u.pendingPoints || 0) + '</td>' +
+        '<td class="mono">' + (u.earnedPoints || 0) + '</td>' +
         '<td><span class="active-dot ' + (u.active ? 'on' : 'off') + '"></span>' + (u.active ? 'Active' : 'Inactive') + '</td>' +
         '<td><button class="btn-ghost" data-toggle-active="' + escapeHtml(u.username) + '" data-active="' + u.active + '">' + (u.active ? 'Deactivate' : 'Reactivate') + '</button></td>' +
         '</tr>';
@@ -1499,6 +1643,7 @@ document.getElementById('hardRefreshBtn').addEventListener('click', async functi
 });
 
 boot();
+
 </script>
 </body>
 </html>
