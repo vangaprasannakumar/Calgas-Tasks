@@ -1,7 +1,7 @@
 {
   "name": "Calgas Tasks",
   "short_name": "CalgasTasks",
-  "description": "Internal help ticket system — raise issues, route them to the right person, track status.",
+  "description": "Internal task manager — create tasks, assign responsible and monitoring people, track progress and points.",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#f3f0ea",
