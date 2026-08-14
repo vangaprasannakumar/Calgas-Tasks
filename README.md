@@ -1,14 +1,15 @@
-# CALGAS Capacitors — Help Desk
+# CALGAS Capacitors — Calgas Tasks
 
 An internal help-ticket system: raise an issue, name who's responsible for it and who you're asking for help, and track it to closed. Built entirely on Google Sheets and Google Apps Script, with an installable PWA frontend — no external hosting, database, or server required. The spreadsheet *is* the database. Same architecture and visual identity as `Stock_Manager`.
 
-**Version:** 1.0.0
+**Version:** 1.1.0 — adds photo attachments on tickets and comments.
 
 ---
 
 ## What it does
 
 - Staff raise a ticket with a subject, problem description, priority, a **Responsible Person** (who's accountable for the issue/area) and an **Assigned To** person (who they're asking for help).
+- Either a ticket or any comment on it can carry **one photo attachment** — resized and compressed client-side before upload, stored in a dedicated Drive folder.
 - Everyone can see and comment on every ticket — there's no per-person visibility wall.
 - The Responsible Person, Assigned To, or an Admin can move a ticket forward: Open → In Progress → Resolved → Closed, with reopen from Resolved.
 - Admins have full control: edit any ticket's details or reassignment, override status to anything (including Cancel), and add/edit/deactivate staff directly in the app — no spreadsheet editing needed.
@@ -30,7 +31,7 @@ An internal help-ticket system: raise an issue, name who's responsible for it an
         │ manifest.json + sw.js               │ reads/writes
         │ (installability, app-shell cache)    ▼
         │                          ┌──────────────────────────┐
-        └─────────────────────────►│ Help_Desk (the Sheet)    │
+        └─────────────────────────►│ Calgas_Tasks (the Sheet) │
                                     │ (the actual data store)   │
                                     └──────────────────────────┘
 ```
@@ -58,15 +59,17 @@ An internal help-ticket system: raise an issue, name who's responsible for it an
 
 | Sheet | Purpose |
 |---|---|
-| `Tickets` | One row per ticket: subject, description, priority, raised by, Responsible Person, Assigned To, status, resolution notes. |
-| `Ticket_Updates` | Append-only log of every comment and status change per ticket — powers the Activity timeline. |
+| `Tickets` | One row per ticket: subject, description, priority, raised by, Responsible Person, Assigned To, status, resolution notes, `AttachmentURL`. |
+| `Ticket_Updates` | Append-only log of every comment and status change per ticket, each with its own optional `AttachmentURL` — powers the Activity timeline. |
 | `Users` | Accounts: name, username, salted password hash, role, department, email, active flag. |
 | `Sessions` | Active login tokens (swept nightly). |
 | `PasswordResets` | Pending OTP codes for password resets (swept nightly). |
 | `AuditLog` | Every ticket edit, status override, and admin action. |
-| `Settings` | Key-value config — `APP_SECRET` (password hashing/session signing) and `NEXT_TICKET_SEQ` (ticket ID counter). |
+| `Settings` | Key-value config — `APP_SECRET` (password hashing/session signing), `NEXT_TICKET_SEQ` (ticket ID counter), and `ATTACHMENTS_FOLDER_ID` (set automatically the first time anyone uploads a photo). |
 
 Columns are read by **header name**, not position — you can freely reorder or widen columns in the sheet without touching the script.
+
+Uploaded photos live in their own Drive folder (named "Calgas Tasks Attachments", created automatically on first upload) rather than in the spreadsheet itself — only the resulting share link is stored in the sheet.
 
 ---
 
@@ -91,13 +94,15 @@ Every permission is enforced **server-side** in `Code.gs` — the frontend hidin
 
 ### 1. Spreadsheet + Apps Script
 
-1. Create a new Google Sheet, e.g. "Help_Desk".
+1. Create a new Google Sheet, e.g. "Calgas_Tasks".
 2. **Extensions → Apps Script**, delete the default `Code.gs` content, paste in this project's `Code.gs`.
 3. Run `ADMIN_setupSheets()` once from the Apps Script editor (select it from the function dropdown, click Run). This creates all seven sheets with headers.
 4. Run `ADMIN_generateAppSecret()` once. Without this, login fails with an explicit error telling you to run it.
 5. Run `ADMIN_createFirstAdmin('yourusername', 'Your Name', 'you@company.com', 'a-temporary-password')` once, from the editor — fill in real values first. This is your first Admin account.
 6. **Deploy → New deployment → Web app.** Execute as *Me*, accessible to *Anyone* (the app handles its own auth on top of this). Copy the deployment URL.
 7. Run `ADMIN_installNightlyCleanupTrigger()` once — sweeps expired sessions and OTP codes nightly.
+
+Already had this deployed before attachments existed? Also run `ADMIN_addAttachmentColumns()` once — it adds the `AttachmentURL` column to `Tickets` and `Ticket_Updates` without touching any existing rows. Safe to run more than once.
 
 ### 2. Frontend
 
@@ -117,12 +122,14 @@ New people are added from **Team & Access** in the app — that flow emails them
 - **Everyone sees everything.** There's no category/department wall on visibility; any signed-in person can read and comment on any ticket. The only permission boundary is *changing* a ticket's status or core fields.
 - **Status changes are logged as timeline entries**, not just overwritten fields — `Ticket_Updates` is append-only, so the full history of who changed what, and when, is always visible in the ticket's Activity feed.
 - **Header-driven sheet access** — every read/write goes through the sheet's header row, not hardcoded column numbers, so columns can be freely reordered later without breaking anything (same convention as the Data tracker script).
+- **Attachments are resized client-side** (max 1600px, JPEG ~80% quality) before upload, so a multi-MB phone photo turns into a small payload regardless of how it was shot. One photo per ticket and per comment for now — multiple photos per post would need a small rework of the storage shape (an array-style field or a separate Attachments sheet) rather than a single `AttachmentURL` column.
+- **Attachment links are "anyone with the link can view," not access-controlled.** There's no proxy in front of Drive checking someone's login before serving the image — the `<img>` tag just hits a public Drive URL directly. The link itself is only ever surfaced inside ticket data shown to signed-in people, but someone who obtained a link some other way could view that one image without logging in. Reasonable for low-sensitivity internal photos; worth revisiting if that ever changes.
 
 ---
 
 ## Known limitations / not yet done
 
-- **No file attachments** on tickets — text only for now. Straightforward to add later via a Drive folder + attachment URL column, if wanted.
+- **One photo per ticket, one per comment** — not multiple attachments, and no non-image file types (PDFs, docs) yet.
 - **No category/department field** — by design, per your answer that tickets route straight to a person rather than through a category list. Easy to add a `Categories` sheet + dropdown later if that changes.
 - **`MailApp` send quota** applies to reset codes and new-account emails — a plain Gmail account gets ~100 sends/day, plenty for normal use.
 - **No email notifications on ticket activity** (e.g. "you were assigned a ticket") — everything is pull-based (check the app), not push. Could be added as a follow-up if useful.
