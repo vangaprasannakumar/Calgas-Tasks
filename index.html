@@ -9,9 +9,9 @@
 <meta name="app-version" content="2.0.0">
 <link rel="manifest" href="./manifest.json">
 <title>Calgas Tasks</title>
-<link rel="icon" href="https://i.postimg.cc/HxdkG3R1/CALGAS-CAPACITORS-LOGO-192x192.jpg">
-<link rel="apple-touch-icon" href="https://i.postimg.cc/76wZvXdD/CALGAS-CAPACITORS-LOGO-512x512.jpg">
-<link rel="preload" href="https://i.postimg.cc/HxdkG3R1/CALGAS-CAPACITORS-LOGO-192x192.jpg" as="image">
+<link rel="icon" href="https://raw.githubusercontent.com/vangaprasannakumar/Stock_Manager/refs/heads/main/logo/LOGO-192x192.jpg">
+<link rel="apple-touch-icon" href="https://raw.githubusercontent.com/vangaprasannakumar/Stock_Manager/refs/heads/main/logo/LOGO-512x512.jpg">
+<link rel="preload" href="https://raw.githubusercontent.com/vangaprasannakumar/Stock_Manager/refs/heads/main/logo/LOGO-192x192.jpg" as="image">
 <link rel="dns-prefetch" href="https://script.google.com">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -645,8 +645,8 @@ const GOOGLE_API_URL = 'https://script.google.com/macros/s/AKfycbzHRIcBXUANi7wRT
 const APP_VERSION = '2.0.0';
 const APP_NAME = 'Calgas Tasks';
 const COMPANY_NAME = 'CALGAS CAPACITORS';
-const COMPANY_LOGO_ICON_URL = 'https://i.postimg.cc/HxdkG3R1/CALGAS-CAPACITORS-LOGO-192x192.jpg';
-const COMPANY_LOGO_FULL_URL = 'https://i.postimg.cc/76wZvXdD/CALGAS-CAPACITORS-LOGO-512x512.jpg';
+const COMPANY_LOGO_ICON_URL = 'https://raw.githubusercontent.com/vangaprasannakumar/Stock_Manager/refs/heads/main/logo/LOGO-192x192.jpg';
+const COMPANY_LOGO_FULL_URL = 'https://raw.githubusercontent.com/vangaprasannakumar/Stock_Manager/refs/heads/main/logo/LOGO-512x512.jpg';
 
 const STATUSES = ['Open', 'In Progress', 'Completed', 'Closed', 'Cancelled'];
 const PRIORITIES = ['Low', 'Medium', 'High', 'Urgent'];
@@ -931,6 +931,16 @@ function renderApp() {
   prioritySelect.innerHTML = '<option value="">All priorities</option>' + PRIORITIES.map(function (p) { return '<option value="' + p + '">' + p + '</option>'; }).join('');
 
   switchPage('home');
+
+  // Assignment emails link to ?task=CT-00001 — open it directly once signed
+  // in, whether that's from a restored session or a fresh login just now.
+  const deepLinkTaskId = new URLSearchParams(location.search).get('task');
+  if (deepLinkTaskId) {
+    openTaskDetail(deepLinkTaskId);
+    if (window.history && window.history.replaceState) {
+      window.history.replaceState({}, '', location.pathname);
+    }
+  }
 }
 
 // ---------- Helpers ----------
