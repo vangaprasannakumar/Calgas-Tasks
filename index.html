@@ -94,7 +94,6 @@
   @keyframes spin { to { transform: rotate(360deg); } }
   @keyframes orbFloat { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(20px, -16px) scale(1.08); } }
   @keyframes splashGlow { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; } }
-  @keyframes capSpark { 0%, 100% { opacity: 0.25; transform: scaleY(0.7); } 50% { opacity: 1; transform: scaleY(1); } }
   @keyframes capPlateGlow { 0%, 100% { box-shadow: 0 0 6px 0 rgba(181, 101, 46, 0.3); } 50% { box-shadow: 0 0 16px 2px rgba(181, 101, 46, 0.65); } }
 
   .spinner { display: inline-block; width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.6s linear infinite; vertical-align: -2px; margin-right: 8px; }
@@ -123,7 +122,6 @@
   .splash-logo-inner img { width: 100%; height: 100%; object-fit: cover; }
   .cap-plate { position: absolute; top: 50%; width: 6px; height: 40px; border-radius: 3px; background: var(--copper); transform: translateY(-50%); animation: capPlateGlow 1.6s ease-in-out infinite; }
   .cap-plate-left { left: -22px; } .cap-plate-right { right: -22px; }
-  .cap-spark { position: absolute; top: 50%; left: 50%; width: 2px; height: 30px; background: var(--copper); transform: translate(-50%, -50%); animation: capSpark 1.6s ease-in-out infinite; }
   .splash-title { margin: 4px 0 2px; font-size: 19px; font-weight: 700; letter-spacing: 0.02em; }
   .splash-sub { margin: 0 0 20px; color: var(--ink-soft); font-size: 13.5px; }
   .splash-progress { width: 180px; height: 3px; border-radius: 2px; background: var(--line-soft); overflow: hidden; }
@@ -276,7 +274,7 @@
   .modal.modal-wide { max-width: 640px; }
   .modal-head { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; gap: 10px; }
   .modal-head h3 { margin: 0; font-size: 17px; }
-  .modal-close { padding: 6px; border-radius: 50%; color: var(--ink-faint); font-size: 18px; line-height: 1; }
+  .modal-close { width: 32px; height: 32px; padding: 0; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: var(--ink-faint); font-size: 18px; line-height: 1; }
   .modal-close:hover { background: var(--hover-surface); color: var(--ink); }
   .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 18px; }
   .modal-loading { display: flex; align-items: center; justify-content: center; gap: 10px; padding: 70px 20px; color: var(--ink-soft); font-size: 13.5px; }
@@ -359,7 +357,7 @@
   .multiselect-empty { padding: 14px; text-align: center; color: var(--ink-faint); font-size: 12.5px; }
 
   /* ---------- Users table ---------- */
-  .users-table { width: 100%; min-width: 760px; border-collapse: collapse; }
+  .users-table { width: 100%; min-width: 860px; border-collapse: collapse; }
   .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 0 -20px; padding: 0 20px; }
   .table-scroll-hint { display: none; text-align: center; font-size: 11px; color: var(--ink-faint); margin: 8px 0 0; }
   .users-table th { text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-faint); padding: 0 10px 10px; white-space: nowrap; }
@@ -441,7 +439,6 @@
   <div class="splash-content">
     <div class="splash-logo-wrap">
       <div class="cap-plate cap-plate-left" aria-hidden="true"></div>
-      <div class="cap-spark" aria-hidden="true"></div>
       <div class="splash-ring"></div>
       <div class="splash-logo-inner"><img class="js-company-logo-icon" alt=""></div>
       <div class="cap-plate cap-plate-right" aria-hidden="true"></div>
@@ -580,7 +577,7 @@
           <div class="task-main">Subject</div>
           <div class="pbadge">Priority</div>
           <div class="points-chip" style="background:none;padding:0;color:var(--ink-soft)">Points</div>
-          <div class="task-persons task-resp">Responsible</div>
+          <div class="task-persons task-resp">Assign to</div>
           <div class="task-persons task-monitor">Monitoring</div>
           <div class="task-status-cell">Status</div>
         </div>
@@ -605,7 +602,7 @@
           <div class="task-main sortable" data-sort-key="Subject">Subject<span class="sort-arrow"></span></div>
           <div class="pbadge sortable" data-sort-key="Priority">Priority<span class="sort-arrow"></span></div>
           <div class="points-chip sortable" data-sort-key="Points" style="background:none;padding:0;color:var(--ink-soft)">Points<span class="sort-arrow"></span></div>
-          <div class="task-persons task-resp sortable" data-sort-key="ResponsiblePerson">Responsible<span class="sort-arrow"></span></div>
+          <div class="task-persons task-resp sortable" data-sort-key="ResponsiblePerson">Assign to<span class="sort-arrow"></span></div>
           <div class="task-persons task-monitor sortable" data-sort-key="MonitoringPerson">Monitoring<span class="sort-arrow"></span></div>
           <div class="task-status-cell sortable" data-sort-key="Status">Status<span class="sort-arrow"></span></div>
         </div>
@@ -621,7 +618,7 @@
       <div class="panel" style="padding-top:8px">
         <div class="table-scroll">
           <table class="users-table">
-            <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Department</th><th>Email</th><th>Pending pts</th><th>Earned pts</th><th>Status</th><th></th></tr></thead>
+            <thead><tr><th>Name</th><th>Username</th><th>Role</th><th>Department</th><th>Email</th><th>Phone</th><th>Pending pts</th><th>Earned pts</th><th>Status</th><th></th></tr></thead>
             <tbody id="usersTableBody"></tbody>
           </table>
         </div>
@@ -1283,8 +1280,8 @@ function openNewTaskModal(e) {
             '<div class="field"><label>Points</label><input type="number" id="ntPoints" min="0" step="1" value="0"></div>' +
           '</div>' +
           '<div class="field-row">' +
-            '<div class="field"><label>Responsible person(s)</label><div class="multiselect" id="ntResponsibleMS"></div><div class="hint">Who is accountable for getting this done.</div></div>' +
-            '<div class="field"><label>Monitoring person(s)</label><div class="multiselect" id="ntMonitoringMS"></div><div class="hint">Who monitors and helps the responsible person.</div></div>' +
+            '<div class="field"><label>Task Assign to(s)</label><div class="multiselect" id="ntResponsibleMS"></div><div class="hint">Who is accountable for getting this done.</div></div>' +
+            '<div class="field"><label>Task Monitoring person(s)</label><div class="multiselect" id="ntMonitoringMS"></div><div class="hint">Who monitors and helps the responsible person.</div></div>' +
           '</div>' +
           '<div class="field">' +
             '<label>Photo (optional)</label>' +
@@ -1416,8 +1413,8 @@ function renderTaskDetailModal(t, updates) {
         '<div class="kv-grid" style="margin-top:16px">' +
           '<div class="kv-item"><div class="kv-label">Raised by</div><div class="kv-value">' + escapeHtml(t.RaisedByName) + (t.RaisedByDept ? ' · ' + escapeHtml(t.RaisedByDept) : '') + '</div></div>' +
           '<div class="kv-item"><div class="kv-label">Raised on</div><div class="kv-value">' + fmtDate(t.CreatedAt) + '</div></div>' +
-          '<div class="kv-item"><div class="kv-label">Responsible person(s)</div><div class="kv-value">' + escapeHtml(personNames(t.ResponsiblePerson)) + '</div></div>' +
-          '<div class="kv-item"><div class="kv-label">Monitoring person(s)</div><div class="kv-value">' + escapeHtml(personNames(t.MonitoringPerson)) + '</div></div>' +
+          '<div class="kv-item"><div class="kv-label">Task Assign to(s)</div><div class="kv-value">' + escapeHtml(personNames(t.ResponsiblePerson)) + '</div></div>' +
+          '<div class="kv-item"><div class="kv-label">Task Monitoring person(s)</div><div class="kv-value">' + escapeHtml(personNames(t.MonitoringPerson)) + '</div></div>' +
           (t.CompletedAt ? '<div class="kv-item"><div class="kv-label">Completed on</div><div class="kv-value">' + fmtDate(t.CompletedAt) + '</div></div>' : '') +
         '</div>' +
         (isAdmin ? '<button class="btn-ghost" id="editTaskBtn" style="margin-bottom:12px">✎ Edit task details</button>' : '') +
@@ -1486,8 +1483,8 @@ function openEditTaskModal(t) {
             '<div class="field"><label>Points</label><input type="number" id="etPoints" min="0" step="1" value="' + (parseFloat(t.Points) || 0) + '"></div>' +
           '</div>' +
           '<div class="field-row">' +
-            '<div class="field"><label>Responsible person(s)</label><div class="multiselect" id="etResponsibleMS"></div></div>' +
-            '<div class="field"><label>Monitoring person(s)</label><div class="multiselect" id="etMonitoringMS"></div></div>' +
+            '<div class="field"><label>Task Assign to(s)</label><div class="multiselect" id="etResponsibleMS"></div></div>' +
+            '<div class="field"><label>Task Monitoring person(s)</label><div class="multiselect" id="etMonitoringMS"></div></div>' +
           '</div>' +
           '<div class="form-error" id="etError"></div>' +
           '<div class="modal-actions">' +
@@ -1547,7 +1544,7 @@ function openEditTaskModal(t) {
 // ---------- Team & Access (Admin) ----------
 async function refreshUsers() {
   if (state.session.role !== 'Admin') return;
-  document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="9"><div class="empty-state"><span class="spinner spinner-dark"></span>Loading people…</div></td></tr>';
+  document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="10"><div class="empty-state"><span class="spinner spinner-dark"></span>Loading people…</div></td></tr>';
   try {
     const result = await api('listUsers', {});
     const body = document.getElementById('usersTableBody');
@@ -1558,6 +1555,7 @@ async function refreshUsers() {
         '<td><span class="role-pill ' + u.role.toLowerCase() + '">' + escapeHtml(u.role) + '</span></td>' +
         '<td>' + escapeHtml(u.department) + '</td>' +
         '<td>' + escapeHtml(u.email) + '</td>' +
+        '<td>' + escapeHtml(u.phone || '—') + '</td>' +
         '<td class="mono">' + (u.pendingPoints || 0) + '</td>' +
         '<td class="mono">' + (u.earnedPoints || 0) + '</td>' +
         '<td><span class="active-dot ' + (u.active ? 'on' : 'off') + '"></span>' + (u.active ? 'Active' : 'Inactive') + '</td>' +
@@ -1590,6 +1588,7 @@ document.getElementById('addUserBtn').addEventListener('click', function () {
             '<div class="field"><label>Username</label><input type="text" id="auUsername" required></div>' +
           '</div>' +
           '<div class="field"><label>Email</label><input type="email" id="auEmail" required><div class="hint">A temporary password is emailed here automatically.</div></div>' +
+          '<div class="field"><label>Phone</label><input type="tel" id="auPhone" placeholder="+91XXXXXXXXXX"><div class="hint">Include the country code (e.g. +91).</div></div>' +
           '<div class="field-row">' +
             '<div class="field"><label>Role</label><select id="auRole"><option value="Staff">Staff</option><option value="Admin">Admin</option></select></div>' +
             '<div class="field"><label>Department</label><input type="text" id="auDept"></div>' +
@@ -1614,6 +1613,7 @@ document.getElementById('addUserBtn').addEventListener('click', function () {
         name: document.getElementById('auName').value.trim(),
         username: document.getElementById('auUsername').value.trim(),
         email: document.getElementById('auEmail').value.trim(),
+        phone: document.getElementById('auPhone').value.trim(),
         role: document.getElementById('auRole').value,
         department: document.getElementById('auDept').value.trim()
       });
