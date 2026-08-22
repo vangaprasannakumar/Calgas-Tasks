@@ -110,7 +110,8 @@
   @keyframes progressSlide { 0% { left: -40%; } 100% { left: 100%; } }
 
   /* ---------- Splash ---------- */
-  #initialLoader { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: var(--paper); overflow: hidden; }
+  #initialLoader { position: fixed; inset: 0; z-index: 9999; display: flex; align-items: center; justify-content: center; background: var(--paper); overflow: hidden; transition: opacity 0.5s var(--ease), visibility 0.5s; }
+  #initialLoader.loader-exit { opacity: 0; visibility: hidden; pointer-events: none; }
   .splash-orbs { position: absolute; inset: 0; pointer-events: none; }
   .splash-orb { position: absolute; width: 280px; height: 280px; border-radius: 50%; filter: blur(60px); animation: orbFloat 8s ease-in-out infinite; }
   .orb-blue { background: var(--azure-soft); top: -60px; left: -60px; }
@@ -211,6 +212,7 @@
   .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 20px; }
   .page-head h2 { margin: 0 0 4px; font-size: 21px; }
   .page-head p { margin: 0; color: var(--ink-soft); font-size: 13.5px; }
+  .freshness-label { font-size: 11.5px; color: var(--ink-faint); white-space: nowrap; }
 
   .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 14px; margin-bottom: 22px; }
   .stat-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; box-shadow: var(--shadow-sm); }
@@ -507,6 +509,21 @@
   </div>
 </div>
 
+<div id="mustChangePasswordScreen" class="center-screen hidden">
+  <div class="auth-card">
+    <div class="auth-brand"><img class="js-company-logo-full" alt=""><div class="auth-brand-sub">One more step</div></div>
+    <h1>Set a new password</h1>
+    <p class="lede">For security, set your own password before continuing.</p>
+    <form id="mustChangePasswordForm">
+      <div class="field"><label for="mcpCurrent">Current password</label><input type="password" id="mcpCurrent" autocomplete="current-password" required></div>
+      <div class="field"><label for="mcpNew">New password</label><input type="password" id="mcpNew" autocomplete="new-password" minlength="6" required><div class="hint">At least 6 characters.</div></div>
+      <div class="field"><label for="mcpConfirm">Confirm new password</label><input type="password" id="mcpConfirm" autocomplete="new-password" minlength="6" required></div>
+      <div class="form-error" id="mcpError"></div>
+      <button type="submit" class="btn-primary" id="mcpSubmit">Set new password</button>
+    </form>
+  </div>
+</div>
+
 <div id="appShell" class="hidden">
   <nav class="rail" id="railNav">
     <div class="rail-brand"><img class="js-company-logo-icon" alt=""><div><div class="rail-brand-name js-company-name"></div><div class="rail-brand-sub js-app-name"></div></div></div>
@@ -526,6 +543,10 @@
     <a href="#" class="nav-link hidden" id="navUsers" data-page="users">
       <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="6" cy="5.5" r="2.5" stroke="currentColor" stroke-width="1.6"/><path d="M1.5 14c0-2.5 2-4 4.5-4s4.5 1.5 4.5 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="6" r="2" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 8.3c1.8.2 3 1.4 3 3.4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
       <span class="label">Team &amp; Access</span>
+    </a>
+    <a href="#" class="nav-link" data-page="profile">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="5.5" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M2.5 14c0-3 2.5-5 5.5-5s5.5 2 5.5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span class="label">Profile</span>
     </a>
 
     <div class="rail-footer">
@@ -571,7 +592,7 @@
         <div class="stat-card"><div class="label-row"><span class="label">My points</span><span class="icon-wrap wrap-copper">🏆</span></div><div class="value" id="statEarnedPoints">—</div><div class="value-sub" id="statPendingPoints"></div></div>
       </div>
       <div class="panel">
-        <div class="panel-head"><h3>Recent tasks</h3><button class="btn-ghost" id="homeViewAllBtn">View all →</button></div>
+        <div class="panel-head"><div style="display:flex;align-items:center;gap:10px"><h3>Recent tasks</h3><span class="freshness-label" id="homeFreshness"></span></div><button class="btn-ghost" id="homeViewAllBtn">View all →</button></div>
         <div class="task-row task-row-head">
           <div class="task-id">ID</div>
           <div class="task-main">Subject</div>
@@ -595,6 +616,7 @@
         <select id="filterStatus"><option value="">All statuses</option></select>
         <select id="filterPriority"><option value="">All priorities</option></select>
         <button class="chip-toggle" id="filterMineToggle">Involving me</button>
+        <span class="freshness-label" id="tasksFreshness"></span>
       </div>
       <div class="panel" style="padding:0 20px 8px">
         <div class="task-row task-row-head" id="tasksHeadRow">
@@ -612,7 +634,7 @@
 
     <section class="page" id="page-users">
       <div class="page-head">
-        <div><h2>Team &amp; Access</h2><p>Add and manage the people who use this app, and see their points.</p></div>
+        <div><h2>Team &amp; Access</h2><p>Add and manage the people who use this app, and see their points. <span class="freshness-label" id="usersFreshness"></span></p></div>
         <button class="btn-primary" style="width:auto" id="addUserBtn">+ Add person</button>
       </div>
       <div class="panel" style="padding-top:8px">
@@ -623,6 +645,43 @@
           </table>
         </div>
         <p class="table-scroll-hint">← Swipe to see more →</p>
+      </div>
+    </section>
+
+    <section class="page" id="page-profile">
+      <div class="page-head">
+        <div><h2>Profile</h2><p>Your account details and password.</p></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Account</h3></div>
+        <div class="kv-grid">
+          <div class="kv-item"><div class="kv-label">Username</div><div class="kv-value" id="profileUsername"></div></div>
+          <div class="kv-item"><div class="kv-label">Role</div><div class="kv-value" id="profileRole"></div></div>
+          <div class="kv-item"><div class="kv-label">Email</div><div class="kv-value" id="profileEmail"></div></div>
+          <div class="kv-item"><div class="kv-label">Phone</div><div class="kv-value" id="profilePhone"></div></div>
+          <div class="kv-item"><div class="kv-label">Department</div><div class="kv-value" id="profileDept"></div></div>
+        </div>
+        <p class="hint">Username, email, phone, and department can only be changed by an Admin, in Team &amp; Access.</p>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Display name</h3></div>
+        <form id="profileNameForm">
+          <div class="field"><label for="profileNameInput">Name</label><input type="text" id="profileNameInput" required></div>
+          <div class="form-error" id="profileNameError"></div>
+          <button type="submit" class="btn-primary" style="width:auto" id="profileNameSubmit">Save name</button>
+        </form>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><h3>Change password</h3></div>
+        <form id="profilePasswordForm">
+          <div class="field"><label for="ppCurrent">Current password</label><input type="password" id="ppCurrent" autocomplete="current-password" required></div>
+          <div class="field-row">
+            <div class="field"><label for="ppNew">New password</label><input type="password" id="ppNew" autocomplete="new-password" minlength="6" required></div>
+            <div class="field"><label for="ppConfirm">Confirm new password</label><input type="password" id="ppConfirm" autocomplete="new-password" minlength="6" required></div>
+          </div>
+          <div class="form-error" id="ppError"></div>
+          <button type="submit" class="btn-primary" style="width:auto" id="ppSubmit">Change password</button>
+        </form>
       </div>
     </section>
   </div>
@@ -639,24 +698,39 @@
    Single-file PWA frontend. No build step, no framework.
    ============================================================ */
 const GOOGLE_API_URL = 'https://script.google.com/macros/s/AKfycbzHRIcBXUANi7wRTOxgn7DooK1UJ65toeSJ792LwXocAD2o72FNQRA2fkNv7FRy2uel/exec';
-const APP_VERSION = '2.0.0';
+const APP_VERSION = '2.1.0';
 const APP_NAME = 'Calgas Tasks';
 const COMPANY_NAME = 'CALGAS CAPACITORS';
 const COMPANY_LOGO_ICON_URL = 'https://raw.githubusercontent.com/vangaprasannakumar/Stock_Manager/refs/heads/main/logo/LOGO-192x192.jpg';
 const COMPANY_LOGO_FULL_URL = 'https://raw.githubusercontent.com/vangaprasannakumar/Stock_Manager/refs/heads/main/logo/LOGO-512x512.jpg';
+const REDUCE_MOTION = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const STATUSES = ['Open', 'In Progress', 'Completed', 'Closed', 'Cancelled'];
 const PRIORITIES = ['Low', 'Medium', 'High', 'Urgent'];
 const FORWARD_TRANSITIONS = { 'Open': ['In Progress'], 'In Progress': ['Completed'], 'Completed': ['Closed', 'Open'] };
 
+// Switching tabs re-renders from whatever's already cached instantly, then
+// refreshes in the background — this throttle just stops rapid tab-flicking
+// from firing a fresh network call every single click. Mutations (creating/
+// editing/completing a task, adding a person, etc.) always pass force=true
+// to bypass it, since the person just changed something and expects to see
+// the result immediately, not whenever the throttle window happens to clear.
+const MIN_REFRESH_GAP_MS = 5000;
+
 let state = {
   session: null,
   users: [],
   tasks: [],
+  tasksLastUpdated: null,
+  homeStats: null,
+  homeStatsLastUpdated: null,
+  teamUsers: null,
+  teamUsersLastUpdated: null,
   filters: { status: '', priority: '', scope: '', search: '' },
   sort: { key: null, dir: 'asc' },
   currentTaskId: null
 };
+let freshnessIntervalId = null;
 
 // ---------- API wrapper ----------
 let pendingRequests = 0;
@@ -742,7 +816,7 @@ function showToast(message, type) {
 
 // ---------- Screen switching ----------
 function showScreen(id) {
-  ['setupScreen', 'loginScreen', 'forgotScreen', 'resetScreen'].forEach(function (s) {
+  ['setupScreen', 'loginScreen', 'forgotScreen', 'resetScreen', 'mustChangePasswordScreen'].forEach(function (s) {
     document.getElementById(s).classList.toggle('hidden', s !== id);
   });
   document.getElementById('appShell').classList.add('hidden');
@@ -759,12 +833,68 @@ function switchPage(pageKey) {
   if (pageKey === 'home') refreshHome();
   if (pageKey === 'tasks') refreshTasksList();
   if (pageKey === 'users') refreshUsers();
+  if (pageKey === 'profile') refreshProfile();
 }
 
 // ---------- Splash / boot ----------
 function setSplashProgress(pct, status) {
   document.getElementById('splashProgressBar').style.width = pct + '%';
   if (status) document.getElementById('splashStatus').textContent = status;
+}
+
+// Promise-based so callers can await the fade-out before doing anything that
+// should only happen once the loader is actually gone. Safe to call even
+// when the loader's already hidden — resolves immediately, no-op.
+function hideInitialLoader(finalMessage) {
+  return new Promise(function (resolve) {
+    const el = document.getElementById('initialLoader');
+    if (!el || el.classList.contains('hidden')) { resolve(); return; }
+    setSplashProgress(100, finalMessage || 'Ready');
+    el.classList.add('loader-exit');
+    el.setAttribute('aria-busy', 'false');
+    setTimeout(function () { el.classList.add('hidden'); resolve(); }, REDUCE_MOTION ? 0 : 480);
+  });
+}
+
+function timeAgo(ts) {
+  if (!ts) return 'never';
+  const secs = Math.floor((Date.now() - ts) / 1000);
+  if (secs < 10) return 'just now';
+  if (secs < 60) return secs + 's ago';
+  const mins = Math.floor(secs / 60);
+  if (mins < 60) return mins + (mins === 1 ? ' min ago' : ' mins ago');
+  const hrs = Math.floor(mins / 60);
+  return hrs + (hrs === 1 ? ' hr ago' : ' hrs ago');
+}
+const FRESHNESS_FIELDS = { home: ['homeFreshness', 'homeStatsLastUpdated'], tasks: ['tasksFreshness', 'tasksLastUpdated'], users: ['usersFreshness', 'teamUsersLastUpdated'] };
+function updateFreshnessLabel(key) {
+  const entry = FRESHNESS_FIELDS[key];
+  if (!entry) return;
+  const el = document.getElementById(entry[0]);
+  if (el) el.textContent = state[entry[1]] ? ('Updated ' + timeAgo(state[entry[1]])) : '';
+}
+function startFreshnessInterval() {
+  if (freshnessIntervalId) clearInterval(freshnessIntervalId);
+  freshnessIntervalId = setInterval(function () {
+    updateFreshnessLabel('home'); updateFreshnessLabel('tasks'); updateFreshnessLabel('users');
+  }, 20000);
+}
+function stopFreshnessInterval() {
+  if (freshnessIntervalId) { clearInterval(freshnessIntervalId); freshnessIntervalId = null; }
+}
+
+// Called on logout so a different person signing in on the same device
+// never briefly sees the previous account's cached tasks/people before the
+// fresh fetch lands.
+function resetCachedState() {
+  state.tasks = []; state.tasksLastUpdated = null;
+  state.homeStats = null; state.homeStatsLastUpdated = null;
+  state.teamUsers = null; state.teamUsersLastUpdated = null;
+  state.users = [];
+  state.filters = { status: '', priority: '', scope: '', search: '' };
+  state.sort = { key: null, dir: 'asc' };
+  state.currentTaskId = null;
+  stopFreshnessInterval();
 }
 
 async function boot() {
@@ -785,7 +915,7 @@ async function boot() {
 
   if (GOOGLE_API_URL.indexOf('PASTE_YOUR') === 0) {
     setSplashProgress(100, 'Needs setup');
-    document.getElementById('initialLoader').classList.add('hidden');
+    await hideInitialLoader();
     showScreen('setupScreen');
     return;
   }
@@ -799,8 +929,7 @@ async function boot() {
       state.session = boot.session;
       saveSession(boot.session);
       state.users = boot.users;
-      setSplashProgress(100, 'Ready');
-      document.getElementById('initialLoader').classList.add('hidden');
+      setSplashProgress(90, 'Loading workspace…');
       renderApp();
       return;
     } catch (err) {
@@ -808,7 +937,7 @@ async function boot() {
     }
   }
   setSplashProgress(100, 'Ready');
-  document.getElementById('initialLoader').classList.add('hidden');
+  await hideInitialLoader();
   showScreen('loginScreen');
 }
 
@@ -825,12 +954,16 @@ document.getElementById('loginForm').addEventListener('submit', async function (
       password: document.getElementById('loginPassword').value
     });
     saveSession(result.session);
+    const loader = document.getElementById('initialLoader');
+    loader.classList.remove('hidden', 'loader-exit');
+    loader.setAttribute('aria-busy', 'true');
+    setSplashProgress(55, 'Signing you in…');
     const boot = await api('bootstrap', {});
     state.session = boot.session; saveSession(boot.session); state.users = boot.users;
+    setSplashProgress(88, 'Loading workspace…');
     renderApp();
   } catch (err) {
     errEl.textContent = err.message;
-  } finally {
     btn.disabled = false; btn.textContent = 'Sign in';
   }
 });
@@ -880,10 +1013,46 @@ document.getElementById('resetForm').addEventListener('submit', async function (
   }
 });
 
+document.getElementById('mustChangePasswordForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const btn = document.getElementById('mcpSubmit');
+  const errEl = document.getElementById('mcpError');
+  errEl.textContent = '';
+  const newPass = document.getElementById('mcpNew').value;
+  const confirmPass = document.getElementById('mcpConfirm').value;
+  if (newPass !== confirmPass) { errEl.textContent = "New passwords don't match."; return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Saving…';
+  try {
+    await api('changeMyPassword', {
+      currentPassword: document.getElementById('mcpCurrent').value,
+      newPassword: newPass
+    });
+    state.session.mustChangePassword = false;
+    saveSession(state.session);
+    showToast('Password set. Welcome in.', 'ok');
+    renderApp();
+  } catch (err) {
+    errEl.textContent = err.message;
+    btn.disabled = false; btn.textContent = 'Set new password';
+  }
+});
+
 document.getElementById('logoutBtn').addEventListener('click', async function () {
-  try { await api('logout', {}); } catch (e) {}
+  const loader = document.getElementById('initialLoader');
+  loader.classList.remove('hidden', 'loader-exit');
+  loader.setAttribute('aria-busy', 'true');
+  setSplashProgress(30, 'Signing you out…');
+  try { await api('logout', {}); } catch (e) { /* client-side sign-out proceeds regardless */ }
+  setSplashProgress(75, 'Clearing your session…');
   clearSession();
-  location.reload();
+  resetCachedState();
+  // Swap the screens while still hidden behind the loader, so what fades
+  // away is the loader itself, never a raw jump-cut between screens — same
+  // as the boot()-time transition, just running in reverse.
+  showScreen('loginScreen');
+  document.getElementById('loginForm').reset();
+  await hideInitialLoader('See you soon');
+  showToast('Signed out.', 'ok');
 });
 document.getElementById('themeToggleBtn').addEventListener('click', toggleTheme);
 
@@ -900,22 +1069,26 @@ document.querySelectorAll('.stat-card[data-goto-status]').forEach(function (card
   card.addEventListener('click', function () {
     state.filters.status = card.dataset.gotoStatus || '';
     state.filters.scope = '';
-    switchPage('tasks');
     document.getElementById('filterStatus').value = state.filters.status;
     document.getElementById('filterMineToggle').classList.remove('active');
-    refreshTasksList();
+    switchPage('tasks');
   });
 });
 document.querySelector('.stat-card[data-goto-scope="mine"]').addEventListener('click', function () {
   state.filters.status = ''; state.filters.scope = 'mine';
-  switchPage('tasks');
   document.getElementById('filterStatus').value = '';
   document.getElementById('filterMineToggle').classList.add('active');
-  refreshTasksList();
+  switchPage('tasks');
 });
 
 // ---------- Render app shell ----------
 function renderApp() {
+  if (state.session.mustChangePassword) {
+    showScreen('mustChangePasswordScreen');
+    hideInitialLoader();
+    return;
+  }
+
   showScreen(null);
   document.getElementById('appShell').classList.remove('hidden');
   document.getElementById('userName').textContent = state.session.name;
@@ -928,6 +1101,8 @@ function renderApp() {
   prioritySelect.innerHTML = '<option value="">All priorities</option>' + PRIORITIES.map(function (p) { return '<option value="' + p + '">' + p + '</option>'; }).join('');
 
   switchPage('home');
+  startFreshnessInterval();
+  hideInitialLoader();
 
   // Assignment emails link to ?task=CT-00001 — open it directly once signed
   // in, whether that's from a restored session or a fresh login just now.
@@ -1133,11 +1308,9 @@ function createMultiSelect(rootId, users, placeholder) {
 }
 
 // ---------- Home ----------
-async function refreshHome() {
-  document.getElementById('recentTasksList').innerHTML = loadingStateHtml('Loading tasks…');
-  document.querySelectorAll('#page-home .stat-card .value').forEach(function (el) { el.textContent = '—'; });
-  try {
-    const stats = await api('dashboardStats', {});
+function renderHomeFromState() {
+  const stats = state.homeStats;
+  if (stats) {
     document.getElementById('statTotal').textContent = stats.total;
     document.getElementById('statOpen').textContent = stats.byStatus['Open'];
     document.getElementById('statInProgress').textContent = stats.byStatus['In Progress'];
@@ -1146,19 +1319,31 @@ async function refreshHome() {
     document.getElementById('statMine').textContent = stats.mine;
     document.getElementById('statEarnedPoints').textContent = pointsLabel(stats.myEarnedPoints);
     document.getElementById('statPendingPoints').textContent = pointsLabel(stats.myPendingPoints) + ' pending';
+  }
+  const listEl = document.getElementById('recentTasksList');
+  if (!state.tasksLastUpdated) {
+    listEl.innerHTML = loadingStateHtml('Loading tasks…');
+  } else if (!state.tasks.length) {
+    listEl.innerHTML = '<div class="empty-state">No tasks yet. Create the first one.</div>';
+  } else {
+    listEl.innerHTML = state.tasks.slice(0, 6).map(taskRowHtml).join('');
+    attachTaskRowHandlers(listEl);
+  }
+  updateFreshnessLabel('home');
+}
 
-    const result = await api('listTasks', {});
+async function refreshHome(force) {
+  renderHomeFromState();
+  if (!force && state.homeStatsLastUpdated && (Date.now() - state.homeStatsLastUpdated) < MIN_REFRESH_GAP_MS) return;
+  try {
+    const [stats, result] = await Promise.all([api('dashboardStats', {}), api('listTasks', {})]);
+    state.homeStats = stats;
+    state.homeStatsLastUpdated = Date.now();
     state.tasks = result.tasks;
-    const recent = result.tasks.slice(0, 6);
-    const listEl = document.getElementById('recentTasksList');
-    if (!recent.length) {
-      listEl.innerHTML = '<div class="empty-state">No tasks yet. Create the first one.</div>';
-    } else {
-      listEl.innerHTML = recent.map(taskRowHtml).join('');
-      attachTaskRowHandlers(listEl);
-    }
+    state.tasksLastUpdated = Date.now();
+    renderHomeFromState();
   } catch (err) {
-    document.getElementById('recentTasksList').innerHTML = '<div class="empty-state">Couldn\'t load tasks.</div>';
+    if (!state.tasksLastUpdated) document.getElementById('recentTasksList').innerHTML = '<div class="empty-state">Couldn\'t load tasks.</div>';
     showToast(err.message, 'error');
   }
 }
@@ -1224,30 +1409,59 @@ document.querySelectorAll('#tasksHeadRow .sortable').forEach(function (h) {
   });
 });
 
+function applyFilters(tasks) {
+  let result = tasks;
+  if (state.filters.status) result = result.filter(function (t) { return t.Status === state.filters.status; });
+  if (state.filters.priority) result = result.filter(function (t) { return t.Priority === state.filters.priority; });
+  if (state.filters.scope === 'mine') {
+    result = result.filter(function (t) {
+      return t.RaisedBy === state.session.username || personsInclude(t.ResponsiblePerson, state.session.username) || personsInclude(t.MonitoringPerson, state.session.username);
+    });
+  }
+  if (state.filters.search) {
+    const q = state.filters.search.toLowerCase();
+    result = result.filter(function (t) {
+      return String(t.TaskID).toLowerCase().indexOf(q) >= 0 ||
+        String(t.Subject).toLowerCase().indexOf(q) >= 0 ||
+        String(t.RaisedByName).toLowerCase().indexOf(q) >= 0 ||
+        personNames(t.ResponsiblePerson).toLowerCase().indexOf(q) >= 0 ||
+        personNames(t.MonitoringPerson).toLowerCase().indexOf(q) >= 0;
+    });
+  }
+  return result;
+}
+
 function renderTasksListFromState() {
   const listEl = document.getElementById('tasksList');
-  const sorted = sortTasks(state.tasks);
+  if (!state.tasksLastUpdated) {
+    listEl.innerHTML = loadingStateHtml('Loading tasks…');
+    updateFreshnessLabel('tasks');
+    return;
+  }
+  const sorted = sortTasks(applyFilters(state.tasks));
   if (!sorted.length) {
-    listEl.innerHTML = '<div class="empty-state">No tasks match these filters.</div>';
+    listEl.innerHTML = '<div class="empty-state">' + (state.tasks.length ? 'No tasks match these filters.' : 'No tasks yet. Create the first one.') + '</div>';
   } else {
     listEl.innerHTML = sorted.map(taskRowHtml).join('');
     attachTaskRowHandlers(listEl);
   }
+  updateFreshnessLabel('tasks');
 }
 
-async function refreshTasksList() {
-  document.getElementById('tasksList').innerHTML = loadingStateHtml('Loading tasks…');
+// Fetches the full task list — unfiltered — and caches it; filtering and
+// sorting both happen entirely client-side against that cache, so changing
+// a filter or switching back to this tab never waits on the network unless
+// the cache is genuinely stale.
+async function refreshTasksList(force) {
+  renderTasksListFromState();
+  if (!force && state.tasksLastUpdated && (Date.now() - state.tasksLastUpdated) < MIN_REFRESH_GAP_MS) return;
   try {
-    const params = {};
-    if (state.filters.status) params.status = state.filters.status;
-    if (state.filters.priority) params.priority = state.filters.priority;
-    if (state.filters.scope) params.scope = state.filters.scope;
-    if (state.filters.search) params.search = state.filters.search;
-    const result = await api('listTasks', params);
+    const result = await api('listTasks', {});
     state.tasks = result.tasks;
+    state.tasksLastUpdated = Date.now();
     renderTasksListFromState();
   } catch (err) {
-    document.getElementById('tasksList').innerHTML = '<div class="empty-state">Couldn\'t load tasks.</div>';
+    if (!state.tasksLastUpdated) document.getElementById('tasksList').innerHTML = '<div class="empty-state">Couldn\'t load tasks.</div>';
     showToast(err.message, 'error');
   }
 }
@@ -1255,14 +1469,14 @@ async function refreshTasksList() {
 document.getElementById('taskSearch').addEventListener('input', function () {
   state.filters.search = this.value.trim();
   clearTimeout(window._searchDebounce);
-  window._searchDebounce = setTimeout(refreshTasksList, 250);
+  window._searchDebounce = setTimeout(renderTasksListFromState, 200);
 });
-document.getElementById('filterStatus').addEventListener('change', function () { state.filters.status = this.value; refreshTasksList(); });
-document.getElementById('filterPriority').addEventListener('change', function () { state.filters.priority = this.value; refreshTasksList(); });
+document.getElementById('filterStatus').addEventListener('change', function () { state.filters.status = this.value; renderTasksListFromState(); });
+document.getElementById('filterPriority').addEventListener('change', function () { state.filters.priority = this.value; renderTasksListFromState(); });
 document.getElementById('filterMineToggle').addEventListener('click', function () {
   const active = this.classList.toggle('active');
   state.filters.scope = active ? 'mine' : '';
-  refreshTasksList();
+  renderTasksListFromState();
 });
 
 // ---------- New Task modal ----------
@@ -1445,7 +1659,7 @@ function renderTaskDetailModal(t, updates) {
         await api('updateStatus', { taskId: t.TaskID, newStatus: btn.dataset.setStatus });
         showToast('Status updated.', 'ok');
         openTaskDetail(t.TaskID);
-        refreshTasksList(); refreshHome();
+        refreshTasksList(true); refreshHome(true);
       } catch (err) { showToast(err.message, 'error'); btn.disabled = false; }
     });
   });
@@ -1524,7 +1738,7 @@ function openEditTaskModal(t) {
       backdrop.remove();
       showToast('Task updated.', 'ok');
       openTaskDetail(t.TaskID);
-      refreshTasksList(); refreshHome();
+      refreshTasksList(true); refreshHome(true);
     } catch (err) { errEl.textContent = err.message; }
   });
 
@@ -1536,46 +1750,117 @@ function openEditTaskModal(t) {
       const detailBackdrop = document.getElementById('taskDetailBackdrop');
       if (detailBackdrop) detailBackdrop.remove();
       showToast('Task cancelled.', 'ok');
-      refreshTasksList(); refreshHome();
+      refreshTasksList(true); refreshHome(true);
     } catch (err) { showToast(err.message, 'error'); }
   });
 }
 
 // ---------- Team & Access (Admin) ----------
-async function refreshUsers() {
+function renderUsersFromState() {
+  const body = document.getElementById('usersTableBody');
+  if (!state.teamUsersLastUpdated) {
+    body.innerHTML = '<tr><td colspan="10"><div class="empty-state"><span class="spinner spinner-dark"></span>Loading people…</div></td></tr>';
+    updateFreshnessLabel('users');
+    return;
+  }
+  body.innerHTML = (state.teamUsers || []).map(function (u) {
+    return '<tr data-username="' + escapeHtml(u.username) + '">' +
+      '<td>' + escapeHtml(u.name) + '</td>' +
+      '<td class="mono">' + escapeHtml(u.username) + '</td>' +
+      '<td><span class="role-pill ' + u.role.toLowerCase() + '">' + escapeHtml(u.role) + '</span></td>' +
+      '<td>' + escapeHtml(u.department) + '</td>' +
+      '<td>' + escapeHtml(u.email) + '</td>' +
+      '<td>' + escapeHtml(u.phone || '—') + '</td>' +
+      '<td class="mono">' + (u.pendingPoints || 0) + '</td>' +
+      '<td class="mono">' + (u.earnedPoints || 0) + '</td>' +
+      '<td><span class="active-dot ' + (u.active ? 'on' : 'off') + '"></span>' + (u.active ? 'Active' : 'Inactive') + (u.mustChangePassword ? '<div class="hint" style="margin-top:2px">Needs password</div>' : '') + '</td>' +
+      '<td><button class="btn-ghost" data-toggle-active="' + escapeHtml(u.username) + '" data-active="' + u.active + '">' + (u.active ? 'Deactivate' : 'Reactivate') + '</button></td>' +
+      '</tr>';
+  }).join('');
+  body.querySelectorAll('[data-toggle-active]').forEach(function (btn) {
+    btn.addEventListener('click', async function () {
+      const username = btn.dataset.toggleActive;
+      const nextActive = btn.dataset.active !== 'true';
+      try {
+        await api('setUserActive', { username: username, active: nextActive });
+        showToast(nextActive ? 'User reactivated.' : 'User deactivated.', 'ok');
+        refreshUsers(true);
+        const boot = await api('bootstrap', {}); state.users = boot.users;
+      } catch (err) { showToast(err.message, 'error'); }
+    });
+  });
+  updateFreshnessLabel('users');
+}
+
+async function refreshUsers(force) {
   if (state.session.role !== 'Admin') return;
-  document.getElementById('usersTableBody').innerHTML = '<tr><td colspan="10"><div class="empty-state"><span class="spinner spinner-dark"></span>Loading people…</div></td></tr>';
+  renderUsersFromState();
+  if (!force && state.teamUsersLastUpdated && (Date.now() - state.teamUsersLastUpdated) < MIN_REFRESH_GAP_MS) return;
   try {
     const result = await api('listUsers', {});
-    const body = document.getElementById('usersTableBody');
-    body.innerHTML = result.users.map(function (u) {
-      return '<tr data-username="' + escapeHtml(u.username) + '">' +
-        '<td>' + escapeHtml(u.name) + '</td>' +
-        '<td class="mono">' + escapeHtml(u.username) + '</td>' +
-        '<td><span class="role-pill ' + u.role.toLowerCase() + '">' + escapeHtml(u.role) + '</span></td>' +
-        '<td>' + escapeHtml(u.department) + '</td>' +
-        '<td>' + escapeHtml(u.email) + '</td>' +
-        '<td>' + escapeHtml(u.phone || '—') + '</td>' +
-        '<td class="mono">' + (u.pendingPoints || 0) + '</td>' +
-        '<td class="mono">' + (u.earnedPoints || 0) + '</td>' +
-        '<td><span class="active-dot ' + (u.active ? 'on' : 'off') + '"></span>' + (u.active ? 'Active' : 'Inactive') + '</td>' +
-        '<td><button class="btn-ghost" data-toggle-active="' + escapeHtml(u.username) + '" data-active="' + u.active + '">' + (u.active ? 'Deactivate' : 'Reactivate') + '</button></td>' +
-        '</tr>';
-    }).join('');
-    body.querySelectorAll('[data-toggle-active]').forEach(function (btn) {
-      btn.addEventListener('click', async function () {
-        const username = btn.dataset.toggleActive;
-        const nextActive = btn.dataset.active !== 'true';
-        try {
-          await api('setUserActive', { username: username, active: nextActive });
-          showToast(nextActive ? 'User reactivated.' : 'User deactivated.', 'ok');
-          refreshUsers();
-          const boot = await api('bootstrap', {}); state.users = boot.users;
-        } catch (err) { showToast(err.message, 'error'); }
-      });
-    });
+    state.teamUsers = result.users;
+    state.teamUsersLastUpdated = Date.now();
+    renderUsersFromState();
   } catch (err) { showToast(err.message, 'error'); }
 }
+
+// ---------- Profile ----------
+function refreshProfile() {
+  const s = state.session;
+  document.getElementById('profileUsername').textContent = s.username;
+  document.getElementById('profileRole').textContent = s.role;
+  document.getElementById('profileEmail').textContent = s.email || '—';
+  document.getElementById('profilePhone').textContent = s.phone || '—';
+  document.getElementById('profileDept').textContent = s.department || '—';
+  document.getElementById('profileNameInput').value = s.name;
+  document.getElementById('profileNameError').textContent = '';
+  document.getElementById('ppError').textContent = '';
+  document.getElementById('profilePasswordForm').reset();
+}
+
+document.getElementById('profileNameForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const btn = document.getElementById('profileNameSubmit');
+  const errEl = document.getElementById('profileNameError');
+  errEl.textContent = '';
+  const name = document.getElementById('profileNameInput').value.trim();
+  if (!name) { errEl.textContent = 'Name is required.'; return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Saving…';
+  try {
+    await api('updateMyProfile', { name: name });
+    state.session.name = name;
+    saveSession(state.session);
+    document.getElementById('userName').textContent = name;
+    showToast('Name updated.', 'ok');
+  } catch (err) {
+    errEl.textContent = err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Save name';
+  }
+});
+
+document.getElementById('profilePasswordForm').addEventListener('submit', async function (e) {
+  e.preventDefault();
+  const btn = document.getElementById('ppSubmit');
+  const errEl = document.getElementById('ppError');
+  errEl.textContent = '';
+  const newPass = document.getElementById('ppNew').value;
+  const confirmPass = document.getElementById('ppConfirm').value;
+  if (newPass !== confirmPass) { errEl.textContent = "New passwords don't match."; return; }
+  btn.disabled = true; btn.innerHTML = '<span class="spinner"></span>Saving…';
+  try {
+    await api('changeMyPassword', {
+      currentPassword: document.getElementById('ppCurrent').value,
+      newPassword: newPass
+    });
+    document.getElementById('profilePasswordForm').reset();
+    showToast('Password changed.', 'ok');
+  } catch (err) {
+    errEl.textContent = err.message;
+  } finally {
+    btn.disabled = false; btn.textContent = 'Change password';
+  }
+});
 
 document.getElementById('addUserBtn').addEventListener('click', function () {
   const html =
@@ -1619,7 +1904,7 @@ document.getElementById('addUserBtn').addEventListener('click', function () {
       });
       backdrop.remove();
       showToast('Person added — a welcome email was sent.', 'ok');
-      refreshUsers();
+      refreshUsers(true);
       const boot = await api('bootstrap', {}); state.users = boot.users;
     } catch (err) {
       errEl.textContent = err.message;
